@@ -1,3 +1,5 @@
+Flowly is a simple, modern CRM designed to help businesses manage leads, customers, sales pipelines, follow-ups, and relationships in one organized workflow. It keeps customer management streamlined, intuitive, and easy to track from first contact to conversion.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
