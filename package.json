@@ -1,5 +1,6 @@
 {
   "name": "flowly",
+  "description": "Flowly is a simple, modern CRM designed to help businesses manage leads, customers, sales pipelines, follow-ups, and relationships in one organized workflow. It keeps customer management streamlined, intuitive, and easy to track from first contact to conversion.",
   "version": "0.1.0",
   "private": true,
   "scripts": {
