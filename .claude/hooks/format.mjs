@@ -37,6 +37,7 @@ const filePath = payload?.tool_input?.file_path ?? payload?.tool_response?.fileP
 if (!filePath || !existsSync(filePath)) process.exit(0);
 if (!FORMATTABLE.has(path.extname(filePath))) process.exit(0);
 if (filePath.includes("node_modules") || filePath.includes(`${path.sep}generated${path.sep}`)) {
+  // `generated/` is Prisma output — never hand-formatted, never hand-edited.
   process.exit(0);
 }
 

@@ -23,7 +23,7 @@
   "search.exclude": {
     "**/.next": true,
     "**/node_modules": true,
-    "**/src/generated": true,
+    "**/generated": true,
     "**/playwright-report": true,
     "**/test-results": true,
     "**/package-lock.json": true

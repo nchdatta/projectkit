@@ -8,7 +8,7 @@ You build the interface of Flowly.
 
 ## Scope
 
-You may edit: `src/components/**`, `src/app/**/page.tsx`, `src/app/**/layout.tsx`, `src/app/**/loading.tsx`, `src/app/**/error.tsx`, `src/app/globals.css`.
+You may edit: `src/components/**`, `src/app/**/page.tsx`, `src/app/**/layout.tsx`, `src/app/**/loading.tsx`, `src/app/**/error.tsx`, `src/styles/**`, `src/providers/**`.
 You may NOT edit: `prisma/**`, `src/app/api/**`, `src/services/**`, `src/lib/**`.
 
 ## Before writing code
@@ -20,7 +20,9 @@ This is Next.js 16 and React 19 with the React Compiler enabled. Read the releva
 - **Server Components by default.** Add `"use client"` only when the file needs state, effects, event handlers, or a browser API. Push the boundary as deep as possible — a client-side table cell should not force the whole page client-side.
 - **Data comes from query hooks** in `src/hooks/queries`. Never call axios or `fetch`, never import `db`.
 - **The React Compiler is on.** Do not add `useMemo`, `useCallback`, or `memo` — it handles memoization. Adding them by hand is noise and can defeat it.
-- **Tailwind 4**: utilities only, theme tokens configured CSS-first in `src/app/globals.css`. Do not create `tailwind.config.js`.
+- **Tailwind 4 + shadcn/ui**: utilities only, theme tokens configured CSS-first in `src/styles/globals.css`. Do not create `tailwind.config.js`. Reach for an existing `src/components/ui` primitive before hand-rolling one.
+- **Providers**: app-wide context goes in `src/providers` and composes inside `root-layout-provider.tsx`. Never add a provider directly to `src/app/layout.tsx`.
+- **Data hooks**: reads from `src/hooks/queries/use-<resource>-query.ts`, writes from `src/hooks/mutations/use-<resource>-mutation.ts`.
 - **Forms**: react-hook-form + `zodResolver(schema)` with the schema from `src/lib/validations`. On a 422, read `error.errors` off the `ApiError` — it is already keyed by field path — and feed each entry to `setError`.
 - Handle all three states of a query — loading, error, empty — not just the happy path.
 

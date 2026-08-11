@@ -8,10 +8,10 @@ You own the client-side data layer of Flowly: entity types, axios services, and 
 
 ## Scope
 
-You may edit: `src/services/**`, `src/hooks/queries/**`.
+You may edit: `src/services/**`, `src/hooks/queries/**`, `src/hooks/mutations/**`, `src/lib/query-keys.ts`.
 You may NOT edit: `prisma/**`, `src/app/api/**`, `src/components/**`.
 
-## The four files you touch, in order
+## The five files you touch, in order
 
 **1. `src/services/types.ts`** — declare the entity by hand.
 Dates are ISO `string`, not `Date`. Do not use `z.infer` and do not re-export Prisma types. This file is the client's view of the entity. Reads take `GetArg` / `ListArg` from here — never a bare `id` string — so `token` and `cache` can be threaded through.
@@ -47,18 +47,23 @@ Axios through `http` from `@/lib/http`. **All mutations live here.** `request()`
 
 Services are the only place a URL appears. No React, no Prisma, in either file.
 
-**4. `src/hooks/queries/<resource>.ts`** — bind keys to the **client** service.
-Build keys with `resourceKeys("<resource>")` from `src/hooks/queries/keys.ts` and register them on the `queryKeys` object; never hand-write a key array. Mutations invalidate through those keys:
+**4. `src/lib/query-keys.ts`** — add the resource's keys to the `queryKeys` object.
+Keys only: no filtering helpers, no token or cache mode. A key carries what changes the result — pagination, search, an id.
+
+**5. Hooks** — bind those keys to the **client** service. Two files per resource, both starting with `"use client"`:
+
+- `src/hooks/queries/use-<resource>-query.ts` — every read hook for the resource (list, detail, counts).
+- `src/hooks/mutations/use-<resource>-mutation.ts` — every write hook (create, update, delete), invalidating through the keys:
 
 ```ts
-onSuccess: () => queryClient.invalidateQueries({ queryKey: leadKeys.lists() });
+onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.leads.all });
 ```
 
-Hook files start with `"use client"`.
+Never hand-write a key array in a hook.
 
 ## Never
 
-- Never import `db`, Prisma, or anything from `src/generated`.
+- Never import `db`, Prisma, or anything from `@generated`.
 - Never import a server service (`*.service.ts`) from a hook. Nothing physically stops you — the fetch transport is not `server-only` — but it attaches no session and its cache options are inert in the browser, so the call quietly drops auth.
 - Never put a mutation in a server service.
 - Never call axios or `fetch` directly from a hook — go through the client service.

@@ -44,7 +44,7 @@ yarn-error.log*
 .vercel
 
 # prisma generated client
-/src/generated
+/generated
 
 # typescript
 *.tsbuildinfo

@@ -2,14 +2,15 @@ import "server-only";
 
 import { PrismaPg } from "@prisma/adapter-pg";
 
-import { PrismaClient } from "@/generated/prisma/client";
+import { PrismaClient } from "@generated/prisma/client";
 import { isDevelopment, serverEnv } from "@/lib/env";
 
 /**
  * The single Prisma client for the whole app.
  *
  * Two Prisma 7 details worth knowing before editing this file:
- *  - The client is generated into `src/generated/prisma` (gitignored). Run
+ *  - The client is generated into `/generated/prisma` at the project root
+ *    (gitignored, reached through the `@generated/*` alias). Run
  *    `npm run db:generate` after any schema change or the import above breaks.
  *  - The connection is supplied by the pg driver adapter, not by the schema —
  *    `schema.prisma` no longer carries a `url`.

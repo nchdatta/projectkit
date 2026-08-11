@@ -11,7 +11,7 @@ Check for these violations specifically — they are the ways this architecture 
 
 **Layering**
 
-- `db` or `@/generated/prisma` imported anywhere except `src/lib/db.ts`
+- `db` or `@generated/prisma` imported anywhere except `src/lib/db.ts`
 - `new PrismaClient()` outside `src/lib/db.ts`
 - a component or page importing `db`, axios, or calling `fetch` directly
 - a Route Handler importing from `src/services`
@@ -23,7 +23,7 @@ Check for these violations specifically — they are the ways this architecture 
 - entity types derived with `z.infer` or re-exported from Prisma instead of declared in `src/services/types.ts`
 - a Route Handler returning bare `NextResponse.json` instead of the `api-response` helpers, or a response missing any of `success` / `status` / `message` / `data` / `errors`
 - a validation failure not returned through `failValidation` (so the form loses its field errors)
-- a hand-written query key array instead of `keys.ts`
+- a hand-written query key array instead of `src/lib/query-keys.ts`, or a key carrying a token / cache mode
 
 **Next.js 16**
 
@@ -31,6 +31,12 @@ Check for these violations specifically — they are the ways this architecture 
 - `params` or `searchParams` used without `await`
 - a Server Action doing work other than `revalidatePath`/`revalidateTag`
 - hand-added `useMemo`/`useCallback`/`memo` (the React Compiler is on)
+
+**Structure**
+
+- a stylesheet outside `src/styles`, or a provider mounted directly in `src/app/layout.tsx` instead of `root-layout-provider.tsx`
+- a hook file not named `use-<resource>-query.ts` / `use-<resource>-mutation.ts`, or a mutation hook sitting in `queries/`
+- an entity type declared in `src/types` instead of `src/services/types.ts`
 
 **Coverage**
 

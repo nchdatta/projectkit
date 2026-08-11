@@ -16,7 +16,7 @@ If the request needs an API or UI change, do the schema part, then report what t
 ## Prisma 7 rules for this repo
 
 - The datasource has **no `url`** — the CLI reads it from `prisma.config.ts`, the runtime from the `PrismaPg` adapter in `src/lib/db.ts`. Do not add `url` back.
-- The client generates into `src/generated/prisma` (gitignored). Every schema edit is followed by `npm run db:generate`.
+- The client generates into `/generated/prisma` at the project root, outside `src` (gitignored, imported as `@generated/prisma/client`). Every schema edit is followed by `npm run db:generate`.
 - Prisma does not auto-load `.env`; `prisma.config.ts` imports `dotenv/config`.
 
 ## Conventions

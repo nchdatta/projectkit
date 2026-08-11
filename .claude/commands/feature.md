@@ -10,7 +10,7 @@ Work through the layering contract in `AGENTS.md` in order, delegating each laye
 1. **Plan** — restate the feature as: models touched, endpoints needed, screens needed. If any part is ambiguous (a field's meaning, a status transition, who can see what), ask before writing code.
 2. **`data-modeler`** — schema changes + migration. Skip if no model change is needed.
 3. **`api-builder`** — zod schemas + route handlers.
-4. **`service-builder`** — entity types, axios services, query hooks and keys.
+4. **`service-builder`** — entity types, both service files, keys in `src/lib/query-keys.ts`, query hooks and mutation hooks.
 5. **`ui-builder`** — components and pages, consuming the hooks.
 6. **`test-author`** — MSW service tests, component tests, and an e2e spec for the user-visible flow.
 7. **Verify** — `npm run verify`, then `npm run test:e2e` if a dev server is available.
