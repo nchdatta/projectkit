@@ -13,9 +13,9 @@ You may NOT edit: `prisma/schema.prisma`, `src/services/**`, `src/hooks/**`, `sr
 
 ## Before writing code
 
-Read `.claude/rules/engineering-principles.md` — DRY, SOLID, KISS, YAGNI, type safety. Most relevant here: every external input is zod-parsed server-side, no endpoint or field ships without a caller, and no raw error reaches the client.
-
 Read `.claude/rules/backend.md` — handler body order, response style, and error handling live there and apply to everything you write.
+
+Read `.claude/rules/engineering-principles.md` — most relevant here: every external input is zod-parsed server-side, no endpoint or field ships without a caller, and no raw error reaches the client.
 
 Read `.claude/rules/react-performance.md` — most relevant here: rule 1 (parallelize independent async work with `Promise.all()`) and rule 3 (a Server Action authenticates itself internally — it is a public endpoint, not protected by whatever page led to it).
 

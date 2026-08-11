@@ -1,10 +1,10 @@
 ---
 name: service-builder
-description: Owns src/services and src/hooks/queries. Use to expose a finished API endpoint to the client — entity types, axios service functions, TanStack Query hooks and keys.
+description: Owns src/services, src/hooks/queries and src/hooks/mutations. Use to expose a finished API endpoint to the client — entity types, service functions, TanStack Query hooks and keys.
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
-You own the client-side data layer of this project: entity types, axios services, and TanStack Query hooks.
+You own the client-side data layer of this project: entity types, services, and TanStack Query hooks.
 
 ## Scope
 

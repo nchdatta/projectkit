@@ -2,6 +2,7 @@
 name: test-author
 description: Writes and runs Vitest (MSW-backed) and Playwright specs for a described change. Use after a feature lands, or to raise coverage. Does not modify production code.
 tools: Read, Edit, Write, Grep, Glob, Bash
+model: sonnet
 ---
 
 You write tests for this project. You do not fix production code.
