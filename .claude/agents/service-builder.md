@@ -48,7 +48,22 @@ Axios through `http` from `@/lib/http`. **All mutations live here.** `request()`
 Services are the only place a URL appears. No React, no Prisma, in either file.
 
 **4. `src/lib/query-keys.ts`** — add the resource's keys to the `queryKeys` object.
-Keys only: no filtering helpers, no token or cache mode. A key carries what changes the result — pagination, search, an id.
+
+Keys only: no filtering helpers. A key carries what changes the result — pagination, search, an id — and **never `token` or `cache`**. Type list keys as `ListFilters` (`ListArg` minus the transport fields), never `ListArg`:
+
+```ts
+leads: {
+  all: ["leads"] as const,
+  list: (filters: ListFilters = {}) => ["leads", "list", filters] as const,
+  detail: (id: string) => ["leads", "detail", id] as const,
+},
+```
+
+In the hook, destructure first — service gets the whole arg, key gets the filters:
+
+```ts
+const { token, cache, ...filters } = arg;
+```
 
 **5. Hooks** — bind those keys to the **client** service. Two files per resource, both starting with `"use client"`:
 

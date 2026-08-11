@@ -40,6 +40,15 @@ export interface ListArg extends Omit<GetArg, "id"> {
   search?: string;
 }
 
+/**
+ * The part of a list argument that identifies a result set.
+ *
+ * `token` and `cache` are transport concerns — they change *how* the request is
+ * made, never *which* rows come back. Query keys are built from this type so a
+ * token rotation cannot fragment the cache or strand entries under a stale key.
+ */
+export type ListFilters = Omit<ListArg, "token" | "cache">;
+
 /** Returned by `GET /api/health` — the reference entity. */
 export type HealthStatus = {
   status: "ok";

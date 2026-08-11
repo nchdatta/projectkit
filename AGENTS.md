@@ -99,7 +99,17 @@ Naming: files are kebab-case; hooks are `use-<resource>-<query\|mutation>.ts`; s
 
 **Providers**: `src/app/layout.tsx` mounts exactly one — `RootLayoutProvider`. Every new app-wide provider composes inside it, so the layout never becomes a nesting pyramid.
 
-**Query keys**: `src/lib/query-keys.ts` holds every key and nothing else — no filtering helpers, no transport concerns. A key carries only what changes the result (pagination, search), never a token or cache mode.
+**Query keys**: `src/lib/query-keys.ts` holds every key and nothing else — no filtering helpers, no transport concerns.
+
+A key carries only what changes the result — pagination, search, an id. **Never `token`, never `cache`.** Those change how a request is made, not which rows come back; keying on them splits the cache between callers holding identical data and strands entries whenever a token rotates. List keys are therefore typed `ListFilters` (`ListArg` minus `token` and `cache`), so the hook destructures before it builds a key:
+
+```ts
+const { token, cache, ...filters } = arg;
+useQuery({
+  queryKey: queryKeys.leads.list(filters), // filters only
+  queryFn: () => leadClientService.list(arg), // service gets the whole arg
+});
+```
 
 ## Server Actions policy
 
