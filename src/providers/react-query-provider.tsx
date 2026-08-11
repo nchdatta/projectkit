@@ -6,14 +6,12 @@ import { useState, type ReactNode } from "react";
 
 import { ApiError } from "@/lib/api-error";
 
-/**
- * TanStack Query provider. Mounted by `RootLayoutProvider`, not by the layout
- * directly.
- *
- * The client is created inside `useState` so each request in SSR gets its own
- * instance — a module-level client would leak one user's cache into another's.
- */
-export function ReactQueryProvider({ children }: { children: ReactNode }) {
+interface ReactQueryProviderProps {
+  children: ReactNode;
+}
+
+// Client built in useState so each SSR request gets its own instance, not a shared module-level one.
+const ReactQueryProvider = ({ children }: ReactQueryProviderProps) => {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -22,7 +20,7 @@ export function ReactQueryProvider({ children }: { children: ReactNode }) {
             staleTime: 60_000,
             refetchOnWindowFocus: false,
             retry: (failureCount, error) => {
-              // 4xx means the request itself was wrong; retrying repeats the mistake.
+              // A 4xx means the request itself was wrong; retrying repeats the mistake.
               if (error instanceof ApiError && error.status >= 400 && error.status < 500) {
                 return false;
               }
@@ -42,4 +40,6 @@ export function ReactQueryProvider({ children }: { children: ReactNode }) {
       <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
     </QueryClientProvider>
   );
-}
+};
+
+export default ReactQueryProvider;

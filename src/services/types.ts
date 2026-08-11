@@ -1,17 +1,6 @@
-/**
- * Entity type definitions — the single source of truth for the shapes that move
- * between the API and the client.
- *
- * Rules:
- *  - Declare types by hand here. Do not re-export Prisma model types and do not
- *    derive entity types with `z.infer` — zod schemas describe *input* payloads,
- *    this file describes *entities* as the client sees them.
- *  - Dates cross the wire as ISO strings, so they are typed `string`, not `Date`.
- *  - Service files and query hooks import from here; nothing else declares an
- *    entity shape.
- */
+// Entity shapes, hand-written, dates as ISO `string`. Not `z.infer`, not re-exported Prisma types.
 
-/** Envelope returned by every Route Handler, already unwrapped by `request()`. */
+// Envelope returned by every Route Handler, already unwrapped by `request()`.
 export type Paginated<T> = {
   items: T[];
   total: number;
@@ -19,37 +8,24 @@ export type Paginated<T> = {
   limit: number;
 };
 
-/**
- * Argument shape for a single-entity read.
- *
- * `token` lets a server-side caller pass a session token explicitly — on the
- * client the request interceptor in `src/lib/http.ts` attaches it automatically,
- * so leave it undefined there. `cache` is forwarded when the call is made with
- * `fetch` from a Server Component rather than through axios.
- */
+// `token`: passed explicitly server-side; on the client the interceptor attaches it. `cache`: fetch-only.
 export interface GetArg {
   token?: string | null;
   id?: string;
   cache?: RequestCache;
 }
 
-/** Argument shape for a list read: pagination and search on top of `GetArg`. */
+// Argument shape for a list read: pagination and search on top of `GetArg`.
 export interface ListArg extends Omit<GetArg, "id"> {
   page?: number;
   limit?: number;
   search?: string;
 }
 
-/**
- * The part of a list argument that identifies a result set.
- *
- * `token` and `cache` are transport concerns — they change *how* the request is
- * made, never *which* rows come back. Query keys are built from this type so a
- * token rotation cannot fragment the cache or strand entries under a stale key.
- */
+// `ListArg` minus the transport fields — what a query key is built from.
 export type ListFilters = Omit<ListArg, "token" | "cache">;
 
-/** Returned by `GET /api/health` — the reference entity. */
+// Returned by `GET /api/health` — the reference entity.
 export type HealthStatus = {
   status: "ok";
   database: "up";

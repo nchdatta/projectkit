@@ -2,6 +2,10 @@
 
 Basic rules. This file grows — new rules get appended below, existing ones only change on explicit instruction.
 
+## Comments
+
+One line, max. State the non-obvious why, not the what.
+
 ## Route files
 
 - One file per resource: `src/app/api/<resource>/route.ts` for the collection (`GET` list, `POST` create), `src/app/api/<resource>/[id]/route.ts` for a single item (`GET`, `PATCH`, `DELETE`).

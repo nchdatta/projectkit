@@ -9,9 +9,7 @@ export default defineConfig({
     // Resolves the `@/*` alias from tsconfig.json — native in Vite 7, no plugin needed.
     tsconfigPaths: true,
     alias: {
-      // `server-only` throws on import outside a React Server Component build.
-      // Stub it so modules that mark themselves server-side (e.g. `src/lib/db.ts`)
-      // stay testable under Vitest.
+      // Stubbed so modules marking themselves server-only (e.g. src/lib/db.ts) stay testable.
       "server-only": fileURLToPath(new URL("./node_modules/server-only/empty.js", import.meta.url)),
     },
   },

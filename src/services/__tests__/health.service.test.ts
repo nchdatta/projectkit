@@ -6,12 +6,7 @@ import { healthService } from "@/services/health.service";
 import { API_URL } from "@/test/msw/handlers";
 import { server } from "@/test/msw/server";
 
-/**
- * Reference **server** service test. Same MSW setup as the client test — MSW
- * intercepts native `fetch` too — so `request` from `@/lib/fetcher` and its
- * error handling are
- * covered without a running server.
- */
+// Reference server service test — MSW intercepts native fetch too, no running server needed.
 describe("healthService (server)", () => {
   it("unwraps the response envelope", async () => {
     server.use(

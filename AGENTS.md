@@ -35,6 +35,8 @@ Syntax-level rules — component definition shape, file layout, handler structur
 - `.claude/rules/backend.md` — route handler files, response style, error handling.
 - `.claude/rules/database.md` — Prisma model conventions, snake_case column mapping, indexes, migrations.
 
+One rule applies everywhere, code of any kind, not just those three files: **comments are one line, max.** State the non-obvious why; never a multi-line block, never restating what the code already says.
+
 Read both before writing UI or API code. They are append-only: treat existing entries as settled unless told otherwise.
 
 ## The layering contract

@@ -2,22 +2,7 @@ import { ApiError } from "@/lib/api-error";
 import type { ApiResponse } from "@/lib/api-response";
 import { clientEnv } from "@/lib/env";
 
-/**
- * The `fetch` transport, used by server services (`*.service.ts`).
- *
- * Native `fetch` rather than axios because only `fetch` participates in the
- * Next.js cache — `cache`, `next.revalidate`, and `next.tags` are the whole
- * reason this file exists.
- *
- * It is not marked `server-only`: the module runs anywhere `fetch` does, so a
- * Client Component may call a server service if it has reason to. The cache
- * options simply have no effect there, and no session is attached automatically —
- * that is the axios interceptor's job in `src/lib/http.ts`.
- *
- * That client half exports a `request` of its own, so both sides read the same at
- * the call site; the import path is what says which transport you are on. Both
- * funnel failures into the same `ApiError`.
- */
+// The `fetch` transport for server services; not `server-only`, but attaches no session on the client.
 
 export type QueryParams = Record<string, string | number | boolean | undefined | null>;
 
@@ -47,12 +32,7 @@ function buildUrl(path: string, params?: QueryParams): string {
   return url.toString();
 }
 
-/**
- * Calls a Route Handler and returns the unwrapped `data`.
- *
- * Throws `ApiError` for a non-2xx, an envelope with `success: false`, a network
- * failure, or a body that is not the expected envelope.
- */
+// Calls a Route Handler and returns the unwrapped `data`, or throws `ApiError`.
 export async function request<T>(path: string, options: FetchOptions = {}): Promise<T> {
   const { method = "GET", token, cache, next, params, body, headers, signal } = options;
 

@@ -4,16 +4,7 @@ import { ApiError } from "@/lib/api-error";
 import type { ApiResponse } from "@/lib/api-response";
 import { clientEnv } from "@/lib/env";
 
-/**
- * The client-side transport.
- *
- * Client services (`*.service.client.ts`) are the only place allowed to use it —
- * never call axios or `fetch` directly from a component or a query hook. Server
- * services use the `request` exported by `src/lib/fetcher.ts` instead.
- *
- * Every failure leaves this module as an `ApiError`, so callers handle one error
- * shape whether the failure came from validation, the network, or a crash.
- */
+// Client-side transport for `*.service.client.ts` files; every failure surfaces as `ApiError`.
 
 export { ApiError };
 
@@ -30,8 +21,7 @@ http.interceptors.request.use((config) => {
 
 http.interceptors.response.use(
   (response: AxiosResponse<ApiResponse<unknown>>) => {
-    // A 2xx carrying `success: false` is still a failure — do not let it through
-    // as data, or services would return `null` where an entity is expected.
+    // A 2xx carrying `success: false` is still a failure — don't let it through as data.
     const body = response.data;
     if (body && body.success === false) {
       throw new ApiError(
@@ -67,13 +57,7 @@ http.interceptors.response.use(
   },
 );
 
-/**
- * Unwraps the envelope so services return plain entities.
- *
- * By the time this runs the interceptor has already rejected every failure, so
- * `data` is present — the guard only covers a handler that returned success with
- * no payload.
- */
+// Unwraps the envelope; the interceptor already rejected failures, so this only guards an empty success.
 export async function request<T>(promise: Promise<AxiosResponse<ApiResponse<T>>>): Promise<T> {
   const response = await promise;
   const body = response.data;

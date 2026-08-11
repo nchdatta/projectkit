@@ -1,22 +1,15 @@
-// Prisma 7. The `prisma-client` generator writes TypeScript into `output` —
-// there is no more implicit `node_modules/.prisma` client. The output sits at the
-// project root, outside `src`, so generated code never mixes with source; the
-// `@generated/*` alias in tsconfig.json is how `src/lib/db.ts` reaches it.
-// Gitignored — regenerate with `npm run db:generate`.
-
+// Output lives at project root (`@generated/*`), gitignored — run `npm run db:generate` after edits.
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
 }
 
-// The connection URL lives in `prisma.config.ts` (CLI) and in the pg adapter
-// inside `src/lib/db.ts` (runtime). Prisma 7 no longer accepts `url` here.
+// Connection URL comes from prisma.config.ts (CLI) and the pg adapter in src/lib/db.ts (runtime).
 datasource db {
   provider = "postgresql"
 }
 
-/// Infrastructure only — proves migrations and the client round-trip work.
-/// CRM models (Lead, Contact, Deal, Activity, …) land here in a later pass.
+// Infrastructure check — CRM models (Lead, Contact, Deal, …) land here later.
 model HealthCheck {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())

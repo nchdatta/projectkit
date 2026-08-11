@@ -6,11 +6,7 @@ import { healthClientService } from "@/services/health.service.client";
 import { API_URL } from "@/test/msw/handlers";
 import { server } from "@/test/msw/server";
 
-/**
- * Reference **client** service test. It exercises the real axios instance and its
- * interceptors — only the network is faked — so envelope unwrapping and
- * `ApiError` normalization are both under test.
- */
+// Reference client service test — real axios instance and interceptors, only the network is faked.
 describe("healthClientService", () => {
   it("unwraps the response envelope", async () => {
     server.use(

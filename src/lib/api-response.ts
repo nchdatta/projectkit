@@ -1,18 +1,9 @@
 import { NextResponse } from "next/server";
 import type { z } from "zod";
 
-/**
- * One response envelope for every Route Handler in `src/app/api`.
- *
- * Both sides of the wire agree on this shape: handlers build it with the helpers
- * below, and the axios interceptor in `src/lib/http.ts` reads it to produce a
- * single `ApiError` type for every failure.
- */
+// One response envelope for every Route Handler; both transports read it into a single `ApiError`.
 
-/**
- * Field path → messages, e.g. `{ "contact.email": ["Invalid email"] }`.
- * Form-level problems collect under `_`. Absent when nothing failed validation.
- */
+// Field path → messages, e.g. `{ "contact.email": ["Invalid email"] }`; form-level under `_`.
 export type ApiErrors = Record<string, string[]>;
 
 export type ApiResponse<T> = {
@@ -43,12 +34,7 @@ export function fail(
   return envelope<null>({ success: false, status, message, data: null, errors });
 }
 
-/**
- * 422 built from a failed zod parse.
- *
- * Issue paths are joined with dots so nested fields (`profile.age`) survive, and
- * the result drops straight into react-hook-form's `setError`.
- */
+// 422 built from a failed zod parse; dotted issue paths drop straight into react-hook-form's `setError`.
 export function failValidation(
   error: z.ZodError,
   message = "Validation failed",

@@ -5,13 +5,7 @@ import { afterAll, afterEach, beforeAll } from "vitest";
 
 import { server } from "@/test/msw/server";
 
-/**
- * Services talk HTTP, so tests intercept HTTP with MSW rather than mocking axios
- * internals — the interceptors in `src/lib/http.ts` stay under test.
- *
- * `onUnhandledRequest: "error"` makes a forgotten handler fail loudly instead of
- * hanging until the axios timeout.
- */
+// MSW intercepts HTTP so the real http.ts interceptors stay under test; unhandled requests error, not hang.
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 
 afterEach(() => {

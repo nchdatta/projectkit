@@ -2,6 +2,10 @@
 
 Basic rules. This file grows — new rules get appended below, existing ones only change on explicit instruction.
 
+## Comments
+
+One line, max, per comment — in `schema.prisma` and in every migration. State the non-obvious fact only (why a field exists, why a default is what it is); no multi-line essays, no restating what the Prisma syntax already says.
+
 ## Naming: snake_case fields, written directly
 
 Field names in the Prisma schema are written in snake_case directly — the same name reaches Postgres, the generated client, and the entity built from it. No `@map` on fields.

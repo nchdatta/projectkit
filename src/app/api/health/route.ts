@@ -1,13 +1,7 @@
 import { ok, serverError } from "@/lib/api-response";
 import { db } from "@/lib/db";
 
-/**
- * Health endpoint — the reference Route Handler.
- *
- * It exists for two reasons: it proves the whole chain (handler → envelope →
- * Prisma → Postgres) is wired, and it is the shape every other handler in
- * `src/app/api` copies.
- */
+// Reference Route Handler — proves handler → envelope → Prisma → Postgres is wired.
 export async function GET() {
   try {
     await db.$queryRaw`SELECT 1`;

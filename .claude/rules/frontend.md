@@ -2,6 +2,10 @@
 
 Basic rules. This file grows — new rules get appended below, existing ones only change on explicit instruction.
 
+## Comments
+
+One line, max. State the non-obvious why, not the what — the component/prop names already say what.
+
 ## Component files
 
 - One component per file. Filename kebab-case, matches the component in PascalCase: `lead-card.tsx` → `LeadCard`.
