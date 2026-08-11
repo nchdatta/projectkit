@@ -85,19 +85,7 @@ Barrel files (`index.ts` doing `export * from "./x"`) drag in every re-exported 
 
 Don't `await` data before returning JSX in an async Server Component — wrap the slow part in `<Suspense>` so the rest of the page renders immediately.
 
-```tsx
-// Incorrect — blocks the whole page on one slow fetch
-const Page = async () => {
-  const data = await fetchSlowData();
-  return (
-    <Layout>
-      <SlowSection data={data} />
-    </Layout>
-  );
-};
-
-export default Page;
-```
+An `async` Page that awaits `fetchSlowData()` before returning its `<Layout>` holds the entire route hostage to the slowest call. Push the fetch into the child and put a boundary around it.
 
 ```tsx
 // Correct — SlowSection fetches its own data behind the boundary
@@ -121,11 +109,9 @@ A component defined inside another component's body is a new type on every paren
 ```tsx
 // Incorrect — Field is redefined, and remounted, on every ParentForm render
 const ParentForm = () => {
-  const Field = ({ name }: FieldProps) => <input name={name} />;
-  return <Field name="email" />;
+  const Field = () => <input name="email" />;
+  return <Field />;
 };
-
-export default ParentForm;
 ```
 
 ```tsx
