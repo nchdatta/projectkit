@@ -15,6 +15,8 @@ If the request needs an API or UI change, do the schema part, then report what t
 
 ## Before writing code
 
+Read `.claude/rules/engineering-principles.md` — most relevant here: YAGNI, no speculative columns, tables, or relations with no feature asking for them.
+
 Read `.claude/rules/database.md` — naming (snake_case fields written directly, no `@map`; `@@map` still names the table), model conventions, indexing, and migration naming live there and apply to every schema change you make.
 
 ## Prisma 7 rules for this repo

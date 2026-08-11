@@ -1,19 +1,14 @@
 # Frontend code style
 
-Basic rules. This file grows — new rules get appended below, existing ones only change on explicit instruction.
+Essential, must-follow. This file grows — new rules get appended below, existing ones only change on explicit instruction.
 
 ## Comments
 
-One line, max. State the non-obvious why, not the what — the component/prop names already say what.
-
-## Component files
-
-- One component per file. Filename kebab-case, matches the component in PascalCase: `lead-card.tsx` → `LeadCard`.
-- `src/components/ui/**` is shadcn-generated and exempt — do not hand-edit it to match these rules; regenerate through the shadcn CLI instead.
+One line, max. State the non-obvious why, not the what.
 
 ## Component definition
 
-Arrow function assigned to a `const`, props typed by an interface declared directly above it, default-exported on its own line at the **bottom** of the file — never `export default function` and never an inline default on the const itself.
+Arrow function assigned to a `const`, props typed by an interface declared directly above it, default-exported on its own line at the bottom — never `export default function`, never an inline default on the const.
 
 ```tsx
 interface LeadCardProps {
@@ -28,30 +23,45 @@ const LeadCard = ({ lead, onSelect }: LeadCardProps) => {
 export default LeadCard;
 ```
 
-Exception: Next.js file-convention components (`page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, `not-found.tsx`) follow the same arrow-function-then-default-export shape, but the export name matches Next's convention (`Home`, `RootLayout`, …) rather than the filename.
-
-## File layout, top to bottom
-
-1. `"use client"` directive, if the file needs one — first line, blank line after.
-2. Imports: external packages, then `@/` internal, then relative — each group separated by a blank line, matching the existing files in this repo.
-3. Local types/interfaces (the component's own `Props`, nothing entity-shaped — those come from `@/services/types`).
-4. Local constants/helpers used only by this component.
-5. The component.
-6. `export default` — the last line.
-
 ## Props
 
-- Destructure in the function signature, not with `props.x` inside the body.
-- Type every prop explicitly. No `any`.
-- `children`: type it `ReactNode`, imported from `"react"`.
+Destructure in the function signature. Type every prop explicitly — no `any`. Type `children` as `ReactNode`.
 
-## Data and state
+## Server Components by default
 
-- Server Components by default; `"use client"` only when the file needs state, effects, handlers, or a browser API — see `AGENTS.md` for the full rule.
-- Data comes from `src/hooks/queries` / `src/hooks/mutations` — never a service or `fetch`/axios directly.
-- The React Compiler is on. Do not hand-write `useMemo`, `useCallback`, or `memo`.
+Add `"use client"` only when the file needs state, effects, event handlers, or a browser API.
 
-## JSX and handlers
+## Push `"use client"` down, never up
 
-- Extract non-trivial event logic to a named function (`handleSubmit`, `handleSelect`) declared above the `return`; don't inline multi-line arrow functions in JSX props.
-- Conditional classes go through `cn()` from `@/lib/utils`. Let `prettier-plugin-tailwindcss` own class order — don't hand-sort utility classes.
+The directive is contagious — every import below a client component becomes client too. Put it on the smallest leaf that needs interactivity, not on the page or layout that contains it. A page with one interactive filter bar stays a Server Component and renders `<FilterBar />` as a client child.
+
+Pass server-fetched data down as props instead of making the parent client so it can fetch.
+
+## Fetch on the server when the data is not interactive
+
+Static or first-paint data comes from a Server Component through the server service. Reach for a query hook when the data is user-driven — refetching, mutation-invalidated, paginated by a control, or polled. Do not render an empty client shell that immediately fetches what the server already knew.
+
+## Render is pure
+
+No mutation, no fetching, no subscriptions, no `localStorage`, no DOM reads during render. Effects are for synchronizing with something outside React — not for deriving values, and not for reacting to a prop change that a plain expression could compute.
+
+## State is minimal
+
+- Never store what you can derive from props, existing state, or the URL.
+- Local `useState` by default; lift only when a second component genuinely needs it; context only for app-wide concerns, mounted through `root-layout-provider.tsx`.
+- Server data lives in TanStack Query, not copied into `useState`.
+- Filters, tabs, and pagination that should survive a reload belong in `searchParams`, not state.
+
+## React rules
+
+- Hooks at the top level of the component or another hook — never in a condition, loop, or callback.
+- Keys are stable and unique to the item (`lead.id`), never the array index.
+- No hand-written `useMemo` / `useCallback` / `memo` — the React Compiler is on and adding them is noise.
+
+## Use the framework primitives
+
+`next/link` for internal navigation (never a bare `<a>`), `next/image` for images, the Metadata API for titles and tags, `next/font` for fonts. Reach for a third-party equivalent only when the built-in cannot do the job.
+
+## Styling
+
+Tailwind utilities in the JSX; `cn()` from `src/lib/utils` to merge conditional classes. No inline `style` objects except for genuinely dynamic values, no CSS modules, no stylesheet outside `src/styles`.

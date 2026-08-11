@@ -31,13 +31,15 @@ A CRM: leads → customers → pipelines → follow-ups. Single Next.js app, ful
 
 Syntax-level rules — component definition shape, file layout, handler structure — live separately and grow independently of this file:
 
-- `.claude/rules/frontend.md` — component files, props, JSX, styling.
+- `.claude/rules/engineering-principles.md` — DRY, single responsibility, composition, KISS, YAGNI, type safety, input trust. Applies to every file; the layering contract below outranks it on conflict.
+- `.claude/rules/frontend.md` — component files, props, JSX, client/server split, state, styling.
 - `.claude/rules/backend.md` — route handler files, response style, error handling.
 - `.claude/rules/database.md` — Prisma model conventions, snake_case column mapping, indexes, migrations.
+- `.claude/rules/react-performance.md` — six must-follow React/Next.js performance rules: parallel async, RSC composition, Server Action auth, lazy loading, Suspense, no inline components.
 
-One rule applies everywhere, code of any kind, not just those three files: **comments are one line, max.** State the non-obvious why; never a multi-line block, never restating what the code already says.
+One rule applies everywhere, code of any kind, not just those files: **comments are one line, max.** State the non-obvious why; never a multi-line block, never restating what the code already says.
 
-Read both before writing UI or API code. They are append-only: treat existing entries as settled unless told otherwise.
+Read `engineering-principles.md` plus the file for the layer you are touching before writing code. They are append-only: treat existing entries as settled unless told otherwise.
 
 ## The layering contract
 

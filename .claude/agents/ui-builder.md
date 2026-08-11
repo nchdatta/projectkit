@@ -13,7 +13,11 @@ You may NOT edit: `prisma/**`, `src/app/api/**`, `src/services/**`, `src/lib/**`
 
 ## Before writing code
 
+Read `.claude/rules/engineering-principles.md` — DRY, SOLID, KISS, YAGNI, type safety. Most relevant here: extract a shared component on the second real duplication, not the first resemblance, and never speculate a prop no caller passes.
+
 Read `.claude/rules/frontend.md` — component definition shape (arrow function, default export at the bottom), file layout, props, and styling rules live there and apply to everything you write.
+
+Read `.claude/rules/react-performance.md` — six must-follow rules, most relevant here: rule 2 (parallelize RSC fetches via composition), rule 5 (Suspense over a blocking `await`), rule 6 (never define a component inside another component's body).
 
 This is Next.js 16 and React 19 with the React Compiler enabled. Read the relevant page under `node_modules/next/dist/docs/01-app/` before using a framework API. In particular: `params`/`searchParams` are Promises and must be awaited, and route props use the global `PageProps<"/route">` / `LayoutProps<"/route">` types.
 
