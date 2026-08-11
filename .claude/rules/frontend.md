@@ -19,6 +19,12 @@ const LeadCard = ({ lead, onSelect }: LeadCardProps) => {
 export default LeadCard;
 ```
 
+## Where a component goes
+
+`src/components/<area>/<module>/<component>.tsx`, where area is `dashboard` (the authed CRM), `storefront` (marketing, auth, anything unauthed), or `shared` (both). `ui/` is shadcn output — regenerate it, never hand-edit it.
+
+The module folder matches the route it serves, not the entity it renders: a lead table used on the pipelines screen lives in `dashboard/pipelines/`. Promote to `shared/` only when a second area actually imports it — one duplicated component is cheaper than a wrong abstraction. `dashboard/` and `storefront/` never import from each other.
+
 ## Server Components by default
 
 `"use client"` only when the file needs state, effects, event handlers, or a browser API — and then on the smallest leaf that needs it. The directive is contagious: every import below a client component becomes client too. A page with one interactive filter bar stays a Server Component and renders `<FilterBar />` as a client child. Pass server-fetched data down as props rather than making the parent client so it can fetch.

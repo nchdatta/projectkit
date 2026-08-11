@@ -49,7 +49,7 @@ src/services/<resource>.service.client.ts      CLIENT service — axios, session
 src/lib/query-keys.ts                          every cache key, in one object
 src/hooks/queries/use-<resource>-query.ts      read hooks
 src/hooks/mutations/use-<resource>-mutation.ts write hooks
-src/components/<feature>/*.tsx                 UI
+src/components/<area>/<module>/*.tsx           UI — area is dashboard | storefront | shared
 src/app/**/actions.ts                          Server Actions — ONLY revalidatePath / revalidateTag
 ```
 
@@ -73,7 +73,20 @@ Copy the working reference implementations: `src/app/api/health/route.ts`, `src/
 
 ## Where files live
 
-Files are kebab-case. `src/app` holds routes, layouts, Route Handlers and `actions.ts` — **no stylesheets, no providers**; all CSS is in `src/styles`, and `layout.tsx` mounts exactly one provider, `RootLayoutProvider`, which every other provider composes inside. `src/components/ui` is shadcn-generated, `src/components/<feature>` is ours. `src/lib` is cross-cutting infrastructure only. `src/types` is ambient `.d.ts` — **not** entity types. MSW lives in `src/test`, Playwright specs in `e2e`, schema and migrations in `prisma`, and the generated Prisma client in `/generated/prisma` at the project root, gitignored.
+Files are kebab-case. `src/app` holds routes, layouts, Route Handlers and `actions.ts` — **no stylesheets, no providers**; all CSS is in `src/styles`, and `layout.tsx` mounts exactly one provider, `RootLayoutProvider`, which every other provider composes inside. `src/lib` is cross-cutting infrastructure only. `src/types` is ambient `.d.ts` — **not** entity types. MSW lives in `src/test`, Playwright specs in `e2e`, schema and migrations in `prisma`, and the generated Prisma client in `/generated/prisma` at the project root, gitignored.
+
+Components are filed by app area, mirroring the route groups:
+
+```
+src/app/(dashboard)/leads/page.tsx         route
+src/components/dashboard/leads/*.tsx       its components — the authed CRM
+src/app/(storefront)/pricing/page.tsx      route
+src/components/storefront/pricing/*.tsx    its components — marketing, auth, anything unauthed
+src/components/shared/*.tsx                used by both areas, app-specific
+src/components/ui/*.tsx                    shadcn-generated primitives — do not hand-edit
+```
+
+A component starts in the area that uses it and moves to `shared/` only when a second area needs it. Never import across areas: `dashboard/` and `storefront/` reach for `shared/` or `ui/`, never for each other.
 
 ## Gotchas your training data gets wrong
 

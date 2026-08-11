@@ -47,7 +47,7 @@ const Page = () => (
 export default Page;
 ```
 
-Siblings that are not exported live in their own files under `src/components/<feature>/` — the default export at the bottom is per file, so a page does not accumulate three components.
+Siblings that are not exported live in their own files under `src/components/<area>/<module>/` — the default export at the bottom is per file, so a page does not accumulate three components.
 
 ## 3. Authenticate Server Actions internally
 

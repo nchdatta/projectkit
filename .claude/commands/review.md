@@ -23,7 +23,7 @@ The rules are in `AGENTS.md` and `.claude/rules/*.md` — read them, do not revi
 | `middleware.ts`                                  | never — it is `proxy.ts` now                              |
 | `queryKey: [`                                    | never — keys come from `src/lib/query-keys.ts`            |
 
-Also flag by filename: a stylesheet outside `src/styles`, a hook not named `use-<resource>-<query\|mutation>.ts`, a mutation hook in `queries/`, an entity type in `src/types`, a provider mounted in `layout.tsx` instead of `root-layout-provider.tsx`.
+Also flag by filename: a component outside `src/components/{dashboard,storefront,shared,ui}/`, a `dashboard/` file importing from `storefront/` or the reverse, a hand-edit to `src/components/ui/`, a stylesheet outside `src/styles`, a hook not named `use-<resource>-<query\|mutation>.ts`, a mutation hook in `queries/`, an entity type in `src/types`, a provider mounted in `layout.tsx` instead of `root-layout-provider.tsx`.
 
 ## 2. Judgment checks — read the changed files
 
