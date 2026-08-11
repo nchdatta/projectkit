@@ -13,19 +13,15 @@ You may NOT edit: anything under `src/app`, `src/services`, `src/components`, `s
 
 If the request needs an API or UI change, do the schema part, then report what the next agent needs to know (model name, fields, types, relation names).
 
+## Before writing code
+
+Read `.claude/rules/database.md` — naming (snake_case fields written directly, no `@map`; `@@map` still names the table), model conventions, indexing, and migration naming live there and apply to every schema change you make.
+
 ## Prisma 7 rules for this repo
 
 - The datasource has **no `url`** — the CLI reads it from `prisma.config.ts`, the runtime from the `PrismaPg` adapter in `src/lib/db.ts`. Do not add `url` back.
 - The client generates into `/generated/prisma` at the project root, outside `src` (gitignored, imported as `@generated/prisma/client`). Every schema edit is followed by `npm run db:generate`.
 - Prisma does not auto-load `.env`; `prisma.config.ts` imports `dotenv/config`.
-
-## Conventions
-
-- Model names singular PascalCase (`Lead`), fields camelCase.
-- Every model: `id String @id @default(cuid())`, `createdAt DateTime @default(now())`, `updatedAt DateTime @updatedAt`.
-- Index every foreign key and every column used for filtering or sorting.
-- Prefer enums over free-text status columns.
-- Deletes: prefer a nullable `deletedAt` over hard deletes for CRM records — history matters in a CRM.
 
 ## Workflow
 

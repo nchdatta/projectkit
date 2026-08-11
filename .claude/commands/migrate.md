@@ -10,7 +10,7 @@ Delegate to the `data-modeler` agent, then confirm its work.
 Sequence:
 
 1. Read `prisma/schema.prisma` as it stands.
-2. Apply the change following the repo conventions (cuid ids, `createdAt`/`updatedAt`, indexed foreign keys, enums over free-text status, `deletedAt` instead of hard deletes).
+2. Apply the change following `.claude/rules/database.md` — cuid ids, `created_at`/`updated_at`, snake_case field names written directly (no `@map`; `@@map` still names the table), indexed foreign keys, enums over free-text status, `deleted_at` instead of hard deletes.
 3. `npx prisma validate && npx prisma format`.
 4. `npm run db:migrate -- --name <short_snake_case_name>` — this writes and applies the migration against `flowly_dev`.
 5. **Print the generated SQL** from the new `prisma/migrations/<timestamp>_<name>/migration.sql`. Call out anything destructive: dropped columns, narrowed types, new `NOT NULL` on an existing table.

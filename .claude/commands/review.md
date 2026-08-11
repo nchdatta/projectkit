@@ -3,7 +3,7 @@ description: Review the working diff against Flowly's layering contract
 allowed-tools: Bash(git status), Bash(git diff:*), Bash(git log:*), Read, Grep, Glob
 ---
 
-Review the current diff (`git diff` plus untracked files from `git status`) against the rules in `AGENTS.md`.
+Review the current diff (`git diff` plus untracked files from `git status`) against the rules in `AGENTS.md` and `.claude/rules/{frontend,backend,database}.md`.
 
 Scope: **$ARGUMENTS** (default: everything uncommitted).
 
@@ -37,6 +37,19 @@ Check for these violations specifically — they are the ways this architecture 
 - a stylesheet outside `src/styles`, or a provider mounted directly in `src/app/layout.tsx` instead of `root-layout-provider.tsx`
 - a hook file not named `use-<resource>-query.ts` / `use-<resource>-mutation.ts`, or a mutation hook sitting in `queries/`
 - an entity type declared in `src/types` instead of `src/services/types.ts`
+
+**Database**
+
+- a Prisma field written camelCase (`createdAt`) instead of snake_case directly (`created_at`), or a `@map` used to fake it instead of just naming the field snake_case
+- a model missing `@@map("<snake_case_plural>")` for the table name
+- a foreign key column with no index
+- a hard `.delete()` on a CRM entity instead of a `deletedAt` soft delete
+
+**Style**
+
+- a component that is not an arrow function, or whose `export default` is not the last line of the file
+- a Route Handler exported as an arrow function instead of `export async function METHOD`
+- a `try/catch` in a Route Handler wrapped around more than the Prisma call
 
 **Coverage**
 

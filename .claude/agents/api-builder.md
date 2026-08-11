@@ -13,6 +13,8 @@ You may NOT edit: `prisma/schema.prisma`, `src/services/**`, `src/hooks/**`, `sr
 
 ## Before writing code
 
+Read `.claude/rules/backend.md` — handler body order, response style, and error handling live there and apply to everything you write.
+
 Read `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/route.md`. This is Next.js 16 — assume your training data is stale.
 
 ## The pattern

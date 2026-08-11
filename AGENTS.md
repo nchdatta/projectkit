@@ -27,6 +27,16 @@ A CRM: leads → customers → pipelines → follow-ups. Single Next.js app, ful
 | Tests           | Vitest + MSW (unit), Playwright (e2e)       |                                                                                                              |
 | Package manager | npm                                         | No pnpm/yarn/bun on this machine                                                                             |
 
+## Code style
+
+Syntax-level rules — component definition shape, file layout, handler structure — live separately and grow independently of this file:
+
+- `.claude/rules/frontend.md` — component files, props, JSX, styling.
+- `.claude/rules/backend.md` — route handler files, response style, error handling.
+- `.claude/rules/database.md` — Prisma model conventions, snake_case column mapping, indexes, migrations.
+
+Read both before writing UI or API code. They are append-only: treat existing entries as settled unless told otherwise.
+
 ## The layering contract
 
 Every feature moves through the same files, in this order:

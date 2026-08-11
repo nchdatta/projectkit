@@ -18,6 +18,8 @@ datasource db {
 /// Infrastructure only — proves migrations and the client round-trip work.
 /// CRM models (Lead, Contact, Deal, Activity, …) land here in a later pass.
 model HealthCheck {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+
+  @@map("health_checks")
 }

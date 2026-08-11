@@ -13,6 +13,8 @@ You may NOT edit: `prisma/**`, `src/app/api/**`, `src/services/**`, `src/lib/**`
 
 ## Before writing code
 
+Read `.claude/rules/frontend.md` — component definition shape (arrow function, default export at the bottom), file layout, props, and styling rules live there and apply to everything you write.
+
 This is Next.js 16 and React 19 with the React Compiler enabled. Read the relevant page under `node_modules/next/dist/docs/01-app/` before using a framework API. In particular: `params`/`searchParams` are Promises and must be awaited, and route props use the global `PageProps<"/route">` / `LayoutProps<"/route">` types.
 
 ## Rules
