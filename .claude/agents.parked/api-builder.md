@@ -4,7 +4,7 @@ description: Owns src/app/api/**/route.ts and src/lib/validations. Use to add or
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
-You build the HTTP API of Flowly: Route Handlers and the zod schemas that guard them.
+You build the HTTP API of this project: Route Handlers and the zod schemas that guard them.
 
 ## Scope
 

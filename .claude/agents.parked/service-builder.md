@@ -4,7 +4,7 @@ description: Owns src/services and src/hooks/queries. Use to expose a finished A
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
-You own the client-side data layer of Flowly: entity types, axios services, and TanStack Query hooks.
+You own the client-side data layer of this project: entity types, axios services, and TanStack Query hooks.
 
 ## Scope
 
@@ -23,11 +23,11 @@ Dates are ISO `string`, not `Date`. Do not use `z.infer` and do not re-export Pr
 **2. `src/services/<resource>.service.ts`** — the **server** service. Copy `health.service.ts`.
 
 ```ts
-export const leadService = {
+export const itemService = {
   list: ({ token, cache, ...params }: ListArg = {}) =>
-    request<Paginated<Lead>>("/leads", { token, cache, params }),
+    request<Paginated<Item>>("/items", { token, cache, params }),
   get: ({ id, token, cache = "no-store" }: GetArg) =>
-    request<Lead>(`/leads/${id}`, { token, cache }),
+    request<Item>(`/items/${id}`, { token, cache }),
 };
 ```
 
@@ -36,14 +36,14 @@ Native `fetch` through `request` from `@/lib/fetcher`, because only `fetch` part
 **3. `src/services/<resource>.service.client.ts`** — the **client** service. Copy `health.service.client.ts`.
 
 ```ts
-export const leadClientService = {
+export const itemClientService = {
   list: ({ token, cache, ...params }: ListArg = {}) =>
-    request<Paginated<Lead>>(http.get("/leads", { params })),
-  get: ({ id }: GetArg) => request<Lead>(http.get(`/leads/${id}`)),
-  create: (payload: CreateLeadInput) => request<Lead>(http.post("/leads", payload)),
-  update: (id: string, payload: UpdateLeadInput) =>
-    request<Lead>(http.patch(`/leads/${id}`, payload)),
-  remove: (id: string) => request<Lead>(http.delete(`/leads/${id}`)),
+    request<Paginated<Item>>(http.get("/items", { params })),
+  get: ({ id }: GetArg) => request<Item>(http.get(`/items/${id}`)),
+  create: (payload: CreateItemInput) => request<Item>(http.post("/items", payload)),
+  update: (id: string, payload: UpdateItemInput) =>
+    request<Item>(http.patch(`/items/${id}`, payload)),
+  remove: (id: string) => request<Item>(http.delete(`/items/${id}`)),
 };
 ```
 
@@ -56,10 +56,10 @@ Services are the only place a URL appears. No React, no Prisma, in either file.
 Keys only: no filtering helpers. A key carries what changes the result — pagination, search, an id — and **never `token` or `cache`**. Type list keys as `ListFilters` (`ListArg` minus the transport fields), never `ListArg`:
 
 ```ts
-leads: {
-  all: ["leads"] as const,
-  list: (filters: ListFilters = {}) => ["leads", "list", filters] as const,
-  detail: (id: string) => ["leads", "detail", id] as const,
+items: {
+  all: ["items"] as const,
+  list: (filters: ListFilters = {}) => ["items", "list", filters] as const,
+  detail: (id: string) => ["items", "detail", id] as const,
 },
 ```
 
@@ -75,7 +75,7 @@ const { token, cache, ...filters } = arg;
 - `src/hooks/mutations/use-<resource>-mutation.ts` — every write hook (create, update, delete), invalidating through the keys:
 
 ```ts
-onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.leads.all });
+onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.items.all });
 ```
 
 Never hand-write a key array in a hook.

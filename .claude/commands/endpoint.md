@@ -5,7 +5,7 @@ argument-hint: <resource> [operations, e.g. list create update delete]
 
 Build the API layer for: **$ARGUMENTS**
 
-The common case in Flowly — an endpoint plus the client plumbing to reach it, no UI. Follow the layering contract in `AGENTS.md` exactly, in this order. Never skip a layer or merge two.
+The common case — an endpoint plus the client plumbing to reach it, no UI. Follow the layering contract in `AGENTS.md` exactly, in this order. Never skip a layer or merge two.
 
 1. **Schema check** — read `prisma/schema.prisma`. If the resource has no model, stop and tell the user; `/migrate` handles that first.
 2. **Validation** — `src/lib/validations/<resource>.ts`: zod schemas per mutating operation, plus list query params. Export from `src/lib/validations/index.ts`.

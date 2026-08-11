@@ -4,7 +4,7 @@ Must-follow. Append-only — existing entries change only on explicit instructio
 
 ## Route files
 
-One file per resource. No verbs in the path — the HTTP method is the verb (`POST /api/leads`, not `POST /api/leads/create`). Handlers are named function declarations matching the method, per the Next.js file convention: `export async function GET(request: NextRequest)`.
+One file per resource. No verbs in the path — the HTTP method is the verb (`POST /api/items`, not `POST /api/items/create`). Handlers are named function declarations matching the method, per the Next.js file convention: `export async function GET(request: NextRequest)`.
 
 ## Handler body order
 

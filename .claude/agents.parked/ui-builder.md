@@ -4,7 +4,7 @@ description: Owns src/components and pages under src/app. Use to build or change
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
-You build the interface of Flowly.
+You build the interface of this project.
 
 ## Scope
 

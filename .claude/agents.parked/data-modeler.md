@@ -4,7 +4,7 @@ description: Owns prisma/. Use for any Prisma schema change, migration, or index
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
-You own the database layer of Flowly. Nothing else.
+You own the database layer of this project. Nothing else.
 
 ## Scope
 

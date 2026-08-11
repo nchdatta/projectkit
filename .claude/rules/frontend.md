@@ -7,23 +7,23 @@ Must-follow. Append-only — existing entries change only on explicit instructio
 Arrow function assigned to a `const`, props typed by an interface directly above it, default export on its own line at the bottom. Never `export default function`, never an inline default on the const. Destructure props in the signature, type every one explicitly — no `any`, `children` is `ReactNode`.
 
 ```tsx
-interface LeadCardProps {
-  lead: Lead;
+interface ItemCardProps {
+  item: Item;
   onSelect?: (id: string) => void;
 }
 
-const LeadCard = ({ lead, onSelect }: LeadCardProps) => {
-  return <div>{lead.name}</div>;
+const ItemCard = ({ item, onSelect }: ItemCardProps) => {
+  return <div>{item.name}</div>;
 };
 
-export default LeadCard;
+export default ItemCard;
 ```
 
 ## Where a component goes
 
-`src/components/<area>/<module>/<component>.tsx`, where area is `dashboard` (the authed CRM), `storefront` (marketing, auth, anything unauthed), or `shared` (both). `ui/` is shadcn output — regenerate it, never hand-edit it.
+`src/components/<area>/<module>/<component>.tsx`, where area is `dashboard` (the authenticated app), `storefront` (marketing, auth, anything unauthed), or `shared` (both). `ui/` is shadcn output — regenerate it, never hand-edit it.
 
-The module folder matches the route it serves, not the entity it renders: a lead table used on the pipelines screen lives in `dashboard/pipelines/`. Promote to `shared/` only when a second area actually imports it — one duplicated component is cheaper than a wrong abstraction. `dashboard/` and `storefront/` never import from each other.
+The module folder matches the route it serves, not the entity it renders: an item table used on the reports screen lives in `dashboard/reports/`. Promote to `shared/` only when a second area actually imports it — one duplicated component is cheaper than a wrong abstraction. `dashboard/` and `storefront/` never import from each other.
 
 ## Server Components by default
 
@@ -45,7 +45,7 @@ No mutation, fetching, subscriptions, `localStorage`, or DOM reads during render
 ## React rules
 
 - Hooks at the top level of a component or another hook — never in a condition, loop, or callback.
-- Keys are stable and unique to the item (`lead.id`), never the array index.
+- Keys are stable and unique to the item (`item.id`), never the array index.
 - No hand-written `useMemo` / `useCallback` / `memo` — the React Compiler is on and adding them is noise.
 
 ## Framework primitives and styling

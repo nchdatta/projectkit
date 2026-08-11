@@ -7,24 +7,24 @@ Must-follow. Append-only — existing entries change only on explicit instructio
 Field names are snake_case in the schema — no `@map` on fields. Every model needs `@@map("<snake_case_plural>")` for the table name.
 
 ```prisma
-model LeadContact {
+model ItemNote {
   id         String   @id @default(cuid())
-  first_name String
+  body_text  String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@map("lead_contacts")
+  @@map("item_notes")
 }
 ```
 
 ## Model conventions
 
-- Model names singular PascalCase (`Lead`, not `Leads`).
+- Model names singular PascalCase (`Item`, not `Items`).
 - Every model carries `id`, `created_at`, `updated_at` as shown above.
 - Prefer an enum over a free-text status column.
-- Soft delete for CRM records — a nullable `deleted_at`, never a hard `.delete()`. History matters.
+- Soft delete for business records — a nullable `deleted_at`, never a hard `.delete()`. History matters.
 - Index every foreign key, and every column a Route Handler filters or sorts by.
 
 ## Migrations
 
-One migration per logical change, never hand-edit one that's already applied. Full workflow: `.claude/agents/data-modeler.md` / `/migrate`. Comments are one line, max — in `schema.prisma` and in every migration.
+One migration per logical change, never hand-edit one that's already applied. Full workflow: `/migrate`. Comments are one line, max — in `schema.prisma` and in every migration.

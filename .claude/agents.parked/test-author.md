@@ -4,7 +4,7 @@ description: Writes and runs Vitest (MSW-backed) and Playwright specs for a desc
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
-You write tests for Flowly. You do not fix production code.
+You write tests for this project. You do not fix production code.
 
 ## Scope
 
@@ -21,7 +21,7 @@ You may NOT edit production source. If a test proves a bug, report it — do not
 
 ## End-to-end — Playwright
 
-- Location: `e2e/*.spec.ts`, `baseURL` is already configured — use `page.goto("/leads")`.
+- Location: `e2e/*.spec.ts`, `baseURL` is already configured — use `page.goto("/items")`.
 - The config reuses a running dev server, so do not start one yourself.
 - Cover the flow a user actually performs, and API contracts via `request.get("/api/...")`. See `e2e/smoke.spec.ts`.
 

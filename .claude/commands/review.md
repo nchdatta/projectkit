@@ -1,5 +1,5 @@
 ---
-description: Review the working diff against Flowly's layering contract
+description: Review the working diff against the project's layering contract
 allowed-tools: Bash(git status), Bash(git diff:*), Bash(git log:*), Read, Grep, Glob
 ---
 
@@ -29,7 +29,7 @@ Also flag by filename: a component outside `src/components/{dashboard,storefront
 
 - **Layering** — a component reaching past its hook; a query hook importing a `*.service.ts` instead of the client one; a Server Action doing anything but `revalidatePath`/`revalidateTag`, or doing it with no auth check inside the action.
 - **Contracts** — `params`/`searchParams` used without `await`; a validation failure not returned through `failValidation`; a query key carrying `token` or `cache`; a `try/catch` around more than the Prisma call.
-- **Database** — a camelCase Prisma field, or `@map` faking snake_case; a model missing `@@map`; an unindexed foreign key; a hard `.delete()` on a CRM entity.
+- **Database** — a camelCase Prisma field, or `@map` faking snake_case; a model missing `@@map`; an unindexed foreign key; a hard `.delete()` on a soft-deletable entity.
 - **Style** — a component that is not an arrow const, or whose `export default` is not the last line; a Route Handler exported as an arrow instead of `export async function METHOD`; a multi-line comment.
 - **Performance** — sequential `await`s on independent work; a Server Component awaiting its own data before children that could fetch in parallel; one slow fetch blocking a whole return instead of a `<Suspense>` boundary; a heavy component imported eagerly or through a barrel `index.ts`; a component defined inside another component's body.
 - **Principles** — the same logic, type, or validation rule declared twice; an abstraction with exactly one caller; a field, endpoint, or prop with no caller in this diff; `any` or an `as` papering over a mismatch; external input used without a zod parse; a component doing two jobs; `"use client"` on a page when only a leaf needs it; state holding a derivable value or a copy of server data; a side effect during render; an array index as a key; a bare `<a>` or `<img>`.

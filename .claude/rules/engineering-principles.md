@@ -6,7 +6,7 @@ Must-follow, every file and layer. Append-only — existing entries change only 
 
 Business logic, validation, and API shapes are declared once: a zod schema guards the handler and the form, a query key lives in `query-keys.ts`, an entity type in `services/types.ts`. Before writing a helper, grep `src/lib`, `src/hooks`, `src/components/ui` for one that exists.
 
-Copy-paste is the signal, not the crime — extract on the **second** real duplication, not the first anticipated one. Two things that merely look alike are not duplication: do not merge a lead form and a customer form into a config-driven mega-component because they share five fields.
+Copy-paste is the signal, not the crime — extract on the **second** real duplication, not the first anticipated one. Two things that merely look alike are not duplication: do not merge two different entities' forms into a config-driven mega-component because they share five fields.
 
 ## Single responsibility
 
