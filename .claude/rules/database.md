@@ -27,4 +27,4 @@ model ItemNote {
 
 ## Migrations
 
-One migration per logical change, never hand-edit one that's already applied. Full workflow: `/migrate`. Comments are one line, max — in `schema.prisma` and in every migration.
+One migration per logical change, never hand-edit one that's already applied. Every schema change goes through `npm run db:migrate` (`prisma migrate dev`) — never `db:push`, never a hand-written SQL file dropped into `prisma/migrations`. `db:push` skips migration history entirely; fine for throwaway local experiments, never for a change that ships. Full workflow: `/migrate`. Comments are one line, max — in `schema.prisma` and in every migration.
