@@ -10,7 +10,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/query-keys";
 import { leadClientService } from "@/services/lead.service.client";
 
-export function useCreateLeadMutation() {
+export const useCreateLeadMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

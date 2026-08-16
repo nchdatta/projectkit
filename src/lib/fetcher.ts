@@ -17,7 +17,7 @@ export type FetchOptions = {
   signal?: AbortSignal;
 };
 
-const API_BASE = `${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api`;
+const API_BASE = `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000'}/api`;
 
 function buildUrl(path: string, params?: QueryParams): string {
   const url = new URL(`${API_BASE}${path.startsWith('/') ? path : `/${path}`}`);

@@ -6,7 +6,7 @@ import { ApiResponse } from '@/services/types';
 // Client-side transport for `*.service.client.ts` files; every failure surfaces as `ApiError`.
 
 export const http: AxiosInstance = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000'}/api`,
   headers: { 'Content-Type': 'application/json' },
   timeout: 15_000,
 });
