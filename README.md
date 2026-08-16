@@ -1,4 +1,4 @@
-projectkit is a layered Next.js reference app and the host for the `nextjs-kit` Claude Code plugin. The app itself is a small CRM (leads, customers, pipelines, follow-ups) used as the worked example for the layering contract.
+projectkit is a layered Next.js reference app and the host for the `nextjs-kit` and `nextjs-frontend-kit` Claude Code plugins. The app itself is a small CRM (leads, customers, pipelines, follow-ups) used as the worked example for the layering contract.
 
 Next.js 16 (App Router) · React 19 · Tailwind 4 · Prisma 7 · PostgreSQL · TanStack Query · Vitest + Playwright.
 
@@ -85,6 +85,46 @@ Then run `/nextjs-kit:init-rules` once to copy the rule files into that project'
 | `react-performance.md`      | Parallel async, RSC composition, Server Action auth, lazy loading, Suspense |
 
 Also ships a `PostToolUse` hook that formats every file an agent writes, and a `bin/init-rules.mjs` installer behind the skill above.
+
+## nextjs-frontend-kit plugin
+
+Same marketplace, different shape — [plugins/nextjs-frontend-kit](plugins/nextjs-frontend-kit) is for a **frontend-only** Next.js app that talks to a separate backend API over `NEXT_PUBLIC_API_BASE_URL`. No Prisma, no route handlers, no service layer — just components, forms, TanStack Query against the API, and tests. Extracted from a real frontend-only project's `.claude/` setup. Install:
+
+```
+/plugin marketplace add nchdatta/projectkit
+/plugin install nextjs-frontend-kit@nchdatta
+```
+
+Then run its `init-rules` skill once to copy the rule files into that project's `.claude/rules/` and scaffold an `AGENTS.md` if missing.
+
+### Agents
+
+| Agent               | Owns                                    | Use for                                               |
+| ------------------- | --------------------------------------- | ----------------------------------------------------- |
+| `ui-builder`        | `src/components`, pages under `src/app` | Screens, forms, layout, styling                       |
+| `test-author`       | Vitest (MSW) + Playwright specs         | Coverage after a feature lands                        |
+| `frontend-reviewer` | read-only                               | Review a diff/branch against scope boundaries + rules |
+
+### Commands
+
+| Command                               | What it does                                          |
+| ------------------------------------- | ----------------------------------------------------- |
+| `/nextjs-frontend-kit:review [scope]` | Review the working diff against scope + conventions   |
+| `/nextjs-frontend-kit:verify`         | Run typecheck + lint + tests, report failures by gate |
+
+### Skill
+
+`init-rules` — one-time setup in a new project: copies `rules/*.md` into `.claude/rules/`, scaffolds `AGENTS.md` from `templates/AGENTS.md` if missing, reports what still needs doing by hand (permissions, stack mismatches, auth scheme).
+
+### Rules (`.claude/rules/`)
+
+| File                        | Covers                                                             |
+| --------------------------- | ------------------------------------------------------------------ |
+| `engineering-principles.md` | DRY, single responsibility, composition, KISS, YAGNI, type safety  |
+| `frontend.md`               | Component files, props, JSX, client/server split, state, styling   |
+| `react-performance.md`      | Parallel async, RSC composition, Server Action scope, lazy loading |
+
+No `backend.md`, no `database.md` — this kit assumes the backend is someone else's repo.
 
 ## Agentic tooling
 
