@@ -7,8 +7,8 @@
     "email": "nayanchdatta.dev@gmail.com",
     "url": "https://github.com/nchdatta"
   },
-  "homepage": "https://github.com/nchdatta/flowly/tree/main/plugins/nextjs-kit",
-  "repository": "https://github.com/nchdatta/flowly",
+  "homepage": "https://github.com/nchdatta/projectkit/tree/main/plugins/nextjs-kit",
+  "repository": "https://github.com/nchdatta/projectkit",
   "license": "MIT",
   "keywords": ["nextjs", "prisma", "tanstack-query", "typescript", "architecture", "agents"]
 }

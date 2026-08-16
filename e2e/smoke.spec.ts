@@ -4,7 +4,7 @@ test("home page renders", async ({ page }) => {
   const response = await page.goto("/");
 
   expect(response?.status()).toBeLessThan(400);
-  await expect(page).toHaveTitle(/flowly/i);
+  await expect(page).toHaveTitle(/projectkit/i);
 });
 
 test("health endpoint reports the database is up", async ({ request }) => {

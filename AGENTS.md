@@ -8,9 +8,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-# Flowly
+# projectkit
 
-A CRM: leads → customers → pipelines → follow-ups. Single Next.js app, fullstack.
+A layered Next.js reference app — leads → customers → pipelines → follow-ups as the worked example. Single Next.js app, fullstack.
 
 | Layer        | Choice                                | Notes                                                         |
 | ------------ | ------------------------------------- | ------------------------------------------------------------- |

@@ -1,4 +1,4 @@
-Flowly is a simple, modern CRM designed to help businesses manage leads, customers, sales pipelines, follow-ups, and relationships in one organized workflow. It keeps customer management streamlined, intuitive, and easy to track from first contact to conversion.
+projectkit is a layered Next.js reference app and the host for the `nextjs-kit` Claude Code plugin. The app itself is a small CRM (leads, customers, pipelines, follow-ups) used as the worked example for the layering contract.
 
 Next.js 16 (App Router) · React 19 · Tailwind 4 · Prisma 7 · PostgreSQL · TanStack Query · Vitest + Playwright.
 
@@ -38,13 +38,60 @@ Route Handlers under `src/app/api` are the API. Services in `src/services` are t
 
 The full contract, including the Next 16 and Prisma 7 gotchas that trip up code generation, is in [AGENTS.md](AGENTS.md).
 
+## nextjs-kit plugin
+
+This repo hosts and dogfoods the `nextjs-kit` Claude Code plugin — agents, commands, rules, and a planning skill under [plugins/nextjs-kit](plugins/nextjs-kit), built for this same layered Next.js + Prisma + TanStack Query stack. Install it in another project with:
+
+```
+/plugin marketplace add nchdatta/projectkit
+/plugin install nextjs-kit@nchdatta
+```
+
+Then run `/nextjs-kit:init-rules` once to copy the rule files into that project's own `.claude/rules/` (rules only auto-load from a project's own directory, so the plugin ships them as payload) and scaffold an `AGENTS.md` if one is missing.
+
+### Agents
+
+| Agent | Owns | Use for |
+| --- | --- | --- |
+| `data-modeler` | `prisma/` | New model, field, enum, relation, migration |
+| `api-builder` | `src/app/api/**/route.ts`, `src/lib/validations` | New or changed REST endpoint |
+| `service-builder` | `src/services`, `src/hooks/queries`, `src/hooks/mutations` | Exposing an endpoint to the client — types, service functions, query hooks |
+| `ui-builder` | `src/components`, pages under `src/app` | Screens, forms, tables, layout |
+| `test-author` | Vitest (MSW) + Playwright specs | Coverage after a feature lands |
+
+### Commands
+
+| Command | What it does |
+| --- | --- |
+| `/nextjs-kit:feature <description>` | Build a full vertical slice — schema, API, services, hooks, UI, tests |
+| `/nextjs-kit:endpoint <resource>` | Build one API resource end-to-end |
+| `/nextjs-kit:migrate <change>` | Change the Prisma schema, produce a reviewed migration |
+| `/nextjs-kit:review [scope]` | Review the working diff against the layering contract |
+| `/nextjs-kit:verify` | Run typecheck + lint + tests, report failures by gate |
+| `/nextjs-kit:init-rules` | One-time setup in a new project — copy rules, scaffold `AGENTS.md` |
+
+### Skill
+
+`feature-plan` — triggered by natural language ("plan this", "spec this out") or describing something to build. Inspects the codebase, then writes `docs/<feature>/brief.md` and `plan.md` before any code is touched.
+
+### Rules (`.claude/rules/`)
+
+| File | Covers |
+| --- | --- |
+| `engineering-principles.md` | DRY, single responsibility, composition, KISS, YAGNI, type safety |
+| `frontend.md` | Component files, props, JSX, client/server split, state, styling |
+| `backend.md` | Route handler files, response style, error handling |
+| `database.md` | Prisma model conventions, snake_case columns, indexes, migrations |
+| `react-performance.md` | Parallel async, RSC composition, Server Action auth, lazy loading, Suspense |
+
+Also ships a `PostToolUse` hook that formats every file an agent writes, and a `bin/init-rules.mjs` installer behind the skill above.
+
 ## Agentic tooling
 
 This repo is set up for AI coding agents:
 
 - `AGENTS.md` / `CLAUDE.md` — project rules, read automatically at session start.
-- `.claude/agents/` — scoped subagents (`data-modeler`, `api-builder`, `service-builder`, `ui-builder`, `test-author`).
-- `.claude/commands/` — `/feature`, `/endpoint`, `/migrate`, `/review`, `/verify`.
+- `.claude/agents/`, `.claude/commands/`, `.claude/rules/` — the same components listed above, used locally rather than through the plugin.
 - `.claude/hooks/format.mjs` — formats every file an agent writes.
 - `.mcp.json` — Next.js devtools MCP (compilation errors, routes, logs from the running dev server) and Playwright MCP (browser view).
 

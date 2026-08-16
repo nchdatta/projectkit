@@ -16,8 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Flowly",
-  description: "A simple, modern CRM for leads, customers, pipelines, and follow-ups.",
+  title: "projectkit",
+  description:
+    "A layered Next.js reference app — leads, customers, pipelines, and follow-ups as the worked example.",
 };
 
 const RootLayout = ({ children }: LayoutProps<"/">) => {
