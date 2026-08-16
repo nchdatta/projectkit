@@ -1,8 +1,8 @@
-import type { NextRequest } from "next/server";
+import type { NextRequest } from 'next/server';
 
-import { created, failValidation, ok, serverError } from "@/lib/api-response";
-import { db } from "@/lib/db";
-import { createLeadSchema, listLeadsQuerySchema } from "@/lib/validations/lead";
+import { created, failValidation, ok, serverError } from '@/lib/api-response';
+import { db } from '@/lib/db';
+import { createLeadSchema, listLeadsQuerySchema } from '@/lib/validations/lead';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -15,27 +15,24 @@ export async function GET(request: NextRequest) {
     ...(search
       ? {
           OR: [
-            { name: { contains: search, mode: "insensitive" as const } },
-            { email: { contains: search, mode: "insensitive" as const } },
+            { name: { contains: search, mode: 'insensitive' as const } },
+            { email: { contains: search, mode: 'insensitive' as const } },
           ],
         }
       : {}),
   };
 
   try {
-    const [items, total] = await Promise.all([
-      db.lead.findMany({
-        where,
-        skip: (page - 1) * limit,
-        take: limit,
-        orderBy: { created_at: "desc" },
-      }),
-      db.lead.count({ where }),
-    ]);
+    const items = await db.lead.findMany({
+      where,
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { created_at: 'desc' },
+    });
 
-    return ok({ items, total, page, limit });
+    return ok(items);
   } catch {
-    return serverError("Could not load leads");
+    return serverError('Could not load leads');
   }
 }
 
@@ -48,6 +45,6 @@ export async function POST(request: NextRequest) {
     const lead = await db.lead.create({ data: parsed.data });
     return created(lead);
   } catch {
-    return serverError("Could not create lead");
+    return serverError('Could not create lead');
   }
 }

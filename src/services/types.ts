@@ -2,19 +2,11 @@
 export type ApiErrors = Record<string, string[]>;
 
 // Envelope returned by every Route Handler, already unwrapped by `request()`.
-export type Pagination = {
-  total: number;
-  limit: number;
-  current_page: number;
-  total_pages: number;
-};
-
 export type ApiResponse<T> = {
   success: boolean;
   status: number;
   message: string;
   data: T | null;
-  pagination?: Pagination;
   errors?: ApiErrors;
 };
 

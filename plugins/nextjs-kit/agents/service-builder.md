@@ -13,7 +13,7 @@ You may NOT edit: `prisma/**`, `src/app/api/**`, `src/components/**`.
 
 ## Before writing code
 
-Read `.claude/rules/engineering-principles.md` — most relevant here: one declaration per fact (entity types in `types.ts`, keys in `query-keys.ts`, nowhere else), narrow types at the point of use (`ListFilters` for keys, `ListArg` for the service call). Read hooks call the server service (fetch — cheap, no session needed for a GET), mutation hooks call the client service (axios — session + `ApiError` via interceptors).
+Read `.claude/rules/engineering-principles.md` — most relevant here: one declaration per fact (entity types in `types.ts`, keys in `query-keys.ts`, nowhere else), narrow types at the point of use. Read hooks call the server service (fetch — cheap, no session needed for a GET), mutation hooks call the client service (axios — session + `ApiError` via interceptors).
 
 ## The five files you touch, in order
 
@@ -25,7 +25,7 @@ Dates are ISO `string`, not `Date`. Do not use `z.infer` and do not re-export Pr
 ```ts
 export const itemService = {
   getItems: ({ token, cache = 'no-store', ...filters }: ListArg = {}) =>
-    request<Paginated<Item>>('/items', { token, cache, params: filters }),
+    request<Item[]>('/items', { token, cache, params: filters }),
   getItem: ({ id, token, cache = 'no-store' }: GetArg & { id: string }) =>
     request<Item>(`/items/${id}`, { token, cache }),
 };
@@ -50,21 +50,15 @@ Services are the only place a URL appears. No React, no Prisma, in either file.
 
 **4. `src/lib/query-keys.ts`** — add the resource's keys to the `QUERY_KEYS` object.
 
-Keys only: no filtering helpers. A key carries what changes the result — pagination, search, an id — and **never `token` or `cache`**. Type list keys as `ListFilters` (`ListArg` minus the transport fields), never `ListArg`:
+Keys only, a bare array per resource:
 
 ```ts
 items: {
-  all: ["items"] as const,
-  list: (filters: ListFilters = {}) => ["items", "list", filters] as const,
-  detail: (id: string) => ["items", "detail", id] as const,
+  list: ["items"],
 },
 ```
 
-In the hook, destructure first — service gets the whole arg, key gets the filters:
-
-```ts
-const { token, cache, ...filters } = arg;
-```
+Never `token` or `cache` in a key. For a detail hook, spread the list key plus the id (`[...QUERY_KEYS.items.list, id]`) rather than hand-writing a new array.
 
 **5. Hooks** — two files per resource, both starting with `"use client"`, split by which service they call:
 
@@ -72,7 +66,7 @@ const { token, cache, ...filters } = arg;
 - `src/hooks/mutations/use-<resource>-mutation.ts` — every write hook (create, update, delete), bound to the **client** service (`itemClientService`, axios-based), invalidating through the keys:
 
 ```ts
-onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.items.all });
+onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.items.list });
 ```
 
 Never hand-write a key array in a hook.
