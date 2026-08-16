@@ -1,12 +1,13 @@
 import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios';
 
 import { ApiError } from '@/lib/api-error';
+import { clientEnv } from '@/lib/env';
 import { ApiResponse } from '@/services/types';
 
 // Client-side transport for `*.service.client.ts` files; every failure surfaces as `ApiError`.
 
 export const http: AxiosInstance = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000'}/api`,
+  baseURL: `${clientEnv.NEXT_PUBLIC_API_BASE_URL}/api`,
   headers: { 'Content-Type': 'application/json' },
   timeout: 15_000,
 });

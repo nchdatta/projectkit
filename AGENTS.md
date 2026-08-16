@@ -61,6 +61,7 @@ Hard rules:
 - **Components never touch the database, axios, or `fetch`.** Client components go through a query/mutation hook → service; Server Components call the server service directly.
 - **Query hooks call the server service, mutation hooks call the client service** — reads reuse the server service's `fetch` transport (fine to call client-side, GET routes don't require the session), writes go through axios so the interceptor attaches the session and errors normalize to `ApiError`.
 - **Route Handlers never import a service.** That would make the API call itself over HTTP.
+- **`process.env` is read only in `src/lib/env.ts`.** Everything else imports `serverEnv` / `clientEnv`.
 - **axios is instantiated only in `src/lib/http.ts`; raw `fetch` against the API only in `src/lib/fetcher.ts`.**
 - **One zod schema per resource in `src/lib/validations/`, used twice** — `safeParse` in the handler, `zodResolver` in the form.
 - **Every Route Handler returns `{ success, status, message, data, errors? }`** via a helper from `src/lib/api-response.ts` (`ok`, `created`, `fail`, `failValidation`, `notFound`, `unauthorized`, `forbidden`, `serverError`) — never a bare `NextResponse.json`. `errors` is keyed by dotted field path (`"contact.email"`), form-level under `_`; both transports turn any `success: false` into an `ApiError` that drops into react-hook-form's `setError`.
