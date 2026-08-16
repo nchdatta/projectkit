@@ -24,9 +24,9 @@ Dates are ISO `string`, not `Date`. Do not use `z.infer` and do not re-export Pr
 
 ```ts
 export const itemService = {
-  list: ({ token, cache, ...params }: ListArg = {}) =>
-    request<Paginated<Item>>("/items", { token, cache, params }),
-  get: ({ id, token, cache = "no-store" }: GetArg) =>
+  getItems: ({ token, cache = 'no-store', ...filters }: ListArg = {}) =>
+    request<Paginated<Item>>('/items', { token, cache, params: filters }),
+  getItem: ({ id, token, cache = 'no-store' }: GetArg & { id: string }) =>
     request<Item>(`/items/${id}`, { token, cache }),
 };
 ```
@@ -37,7 +37,7 @@ Native `fetch` through `request` from `@/lib/fetcher`, because only `fetch` part
 
 ```ts
 export const itemClientService = {
-  createItem: (payload: CreateItemInput) => request<Item>(http.post("/items", payload)),
+  createItem: (payload: CreateItemInput) => request<Item>(http.post('/items', payload)),
   updateItem: (id: string, payload: UpdateItemInput) =>
     request<Item>(http.patch(`/items/${id}`, payload)),
   deleteItem: (id: string) => request<Item>(http.delete(`/items/${id}`)),
@@ -48,31 +48,25 @@ Axios through `http` from `@/lib/http`. **Writes only** — reads go through the
 
 Services are the only place a URL appears. No React, no Prisma, in either file.
 
-**4. `src/lib/query-keys.ts`** — add the resource's keys to the `queryKeys` object.
+**4. `src/lib/query-keys.ts`** — add the resource's keys to the `QUERY_KEYS` object.
 
-Keys only: no filtering helpers. A key carries what changes the result — pagination, search, an id — and **never `token` or `cache`**. Type list keys as `ListFilters` (`ListArg` minus the transport fields), never `ListArg`:
+Keys only, matching the flat shape already there (see `leads`) — a bare array per resource, e.g.:
 
 ```ts
 items: {
-  all: ["items"] as const,
-  list: (filters: ListFilters = {}) => ["items", "list", filters] as const,
-  detail: (id: string) => ["items", "detail", id] as const,
+  list: ["items"],
 },
 ```
 
-In the hook, destructure first — service gets the whole arg, key gets the filters:
+Never `token` or `cache` in a key. For a detail hook, spread the list key plus the id (`[...QUERY_KEYS.items.list, id]`) rather than hand-writing a new array.
+
+**5. Hooks** — two files per resource, both starting with `"use client"`, split by which service they call:
+
+- `src/hooks/queries/use-<resource>-query.ts` — every read hook (list, detail, counts), bound to the **server** service (`itemService`, `fetch`-based). A GET needs no session, and only `fetch` participates in the Next.js cache.
+- `src/hooks/mutations/use-<resource>-mutation.ts` — every write hook (create, update, delete), bound to the **client** service (`itemClientService`, axios-based), invalidating through the keys:
 
 ```ts
-const { token, cache, ...filters } = arg;
-```
-
-**5. Hooks** — bind those keys to the **client** service. Two files per resource, both starting with `"use client"`:
-
-- `src/hooks/queries/use-<resource>-query.ts` — every read hook for the resource (list, detail, counts).
-- `src/hooks/mutations/use-<resource>-mutation.ts` — every write hook (create, update, delete), invalidating through the keys:
-
-```ts
-onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.items.all });
+onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.items.list });
 ```
 
 Never hand-write a key array in a hook.
@@ -80,9 +74,8 @@ Never hand-write a key array in a hook.
 ## Never
 
 - Never import `db`, Prisma, or anything from `@generated`.
-- Never import a server service (`*.service.ts`) from a hook. Nothing physically stops you — the fetch transport is not `server-only` — but it attaches no session and its cache options are inert in the browser, so the call quietly drops auth.
-- Never put a mutation in a server service.
-- Never call axios or `fetch` directly from a hook — go through the client service.
+- Never call a mutation (create/update/delete) through the server service — those live only in the client service.
+- Never call axios or `fetch` directly from a hook — go through the appropriate service.
 - Never put data reshaping in a hook that belongs in the service.
 
 ## Finish

@@ -27,7 +27,7 @@ Also flag by filename: a component outside `src/components/{dashboard,storefront
 
 ## 2. Judgment checks — read the changed files
 
-- **Layering** — a component reaching past its hook; a query hook importing a `*.service.ts` instead of the client one; a Server Action doing anything but `revalidatePath`/`revalidateTag`, or doing it with no auth check inside the action.
+- **Layering** — a component reaching past its hook; a mutation hook importing the server service instead of the client one, or a query hook importing the client service instead of the server one; a Server Action doing anything but `revalidatePath`/`revalidateTag`, or doing it with no auth check inside the action.
 - **Contracts** — `params`/`searchParams` used without `await`; a validation failure not returned through `failValidation`; a query key carrying `token` or `cache`; a `try/catch` around more than the Prisma call.
 - **Database** — a camelCase Prisma field, or `@map` faking snake_case; a model missing `@@map`; an unindexed foreign key; a hard `.delete()` on a soft-deletable entity.
 - **Style** — a component that is not an arrow const, or whose `export default` is not the last line; a Route Handler exported as an arrow instead of `export async function METHOD`; a multi-line comment.
