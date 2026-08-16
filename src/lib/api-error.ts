@@ -1,4 +1,4 @@
-import type { ApiErrors } from "@/lib/api-response";
+import { ApiErrors } from "@/services/types";
 
 // The one failure type in the app; both transports (http.ts, fetcher.ts) throw it.
 export class ApiError extends Error {

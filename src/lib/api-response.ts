@@ -1,18 +1,6 @@
+import { ApiErrors, ApiResponse } from "@/services/types";
 import { NextResponse } from "next/server";
 import type { z } from "zod";
-
-// One response envelope for every Route Handler; both transports read it into a single `ApiError`.
-
-// Field path → messages, e.g. `{ "contact.email": ["Invalid email"] }`; form-level under `_`.
-export type ApiErrors = Record<string, string[]>;
-
-export type ApiResponse<T> = {
-  success: boolean;
-  status: number;
-  message: string;
-  data: T | null;
-  errors?: ApiErrors;
-};
 
 function envelope<T>(body: ApiResponse<T>): NextResponse<ApiResponse<T>> {
   return NextResponse.json(body, { status: body.status });

@@ -1,11 +1,21 @@
 // Entity shapes, hand-written, dates as ISO `string`. Not `z.infer`, not re-exported Prisma types.
+export type ApiErrors = Record<string, string[]>;
 
 // Envelope returned by every Route Handler, already unwrapped by `request()`.
-export type Paginated<T> = {
-  items: T[];
+export type Pagination = {
   total: number;
-  page: number;
   limit: number;
+  current_page: number;
+  total_pages: number;
+};
+
+export type ApiResponse<T> = {
+  success: boolean;
+  status: number;
+  message: string;
+  data: T | null;
+  pagination?: Pagination;
+  errors?: ApiErrors;
 };
 
 // `token`: passed explicitly server-side; on the client the interceptor attaches it. `cache`: fetch-only.
@@ -21,9 +31,6 @@ export interface ListArg extends Omit<GetArg, "id"> {
   limit?: number;
   search?: string;
 }
-
-// `ListArg` minus the transport fields — what a query key is built from.
-export type ListFilters = Omit<ListArg, "token" | "cache">;
 
 export type LeadStatus = "NEW" | "CONTACTED" | "QUALIFIED" | "LOST" | "CONVERTED";
 
