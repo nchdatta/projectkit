@@ -1,6 +1,6 @@
 {
   "name": "projectkit",
-  "description": "A layered Next.js reference app and host for the nextjs-kit Claude Code plugin — project structure, conventions, and agentic tooling in one place.",
+  "description": "A layered Next.js reference app and host for the nextjs-kit and nextjs-frontend-kit Claude Code plugins — project structure, conventions, and agentic tooling in one place.",
   "version": "0.1.0",
   "private": true,
   "scripts": {
