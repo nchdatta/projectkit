@@ -25,7 +25,7 @@ Dates are ISO `string`, not `Date`. Do not use `z.infer` and do not re-export Pr
 ```ts
 export const itemService = {
   getItems: ({ token, cache = 'no-store', ...filters }: ListArg = {}) =>
-    request<Paginated<Item>>('/items', { token, cache, params: filters }),
+    request<Item[]>('/items', { token, cache, params: filters }),
   getItem: ({ id, token, cache = 'no-store' }: GetArg & { id: string }) =>
     request<Item>(`/items/${id}`, { token, cache }),
 };
