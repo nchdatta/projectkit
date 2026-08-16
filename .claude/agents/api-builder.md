@@ -23,7 +23,7 @@ Read `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/ro
 
 ## The pattern
 
-Copy `src/app/api/health/route.ts`. Every handler:
+Copy `src/app/api/leads/route.ts` (and `leads/[id]/route.ts` for a dynamic segment). Every handler:
 
 1. Parses input with a zod schema from `src/lib/validations/<resource>.ts` — `const parsed = schema.safeParse(await request.json())`.
 2. Returns `failValidation(parsed.error)` on failure — a 422 whose `errors` map keys each dotted field path to its messages.

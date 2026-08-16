@@ -2,8 +2,10 @@ import type { ListFilters } from "@/services/types";
 
 // Every TanStack Query cache key, in one object. Keys only — never `token` or `cache` (see AGENTS.md).
 export const queryKeys = {
-  health: {
-    all: ["health"] as const,
+  leads: {
+    all: ["leads"] as const,
+    list: (filters: ListFilters) => ["leads", "list", filters] as const,
+    detail: (id: string) => ["leads", "detail", id] as const,
   },
 } as const;
 

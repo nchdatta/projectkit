@@ -15,14 +15,14 @@ You may NOT edit production source. If a test proves a bug, report it — do not
 ## Unit / integration — Vitest
 
 - Location: `__tests__/` beside the code under test.
-- Services are tested through **MSW**, not axios mocks: `server.use(http.get(...))` from `src/test/msw`. That keeps the real interceptors in `src/lib/http.ts` under test. Copy `src/services/__tests__/health.service.test.ts`.
+- Services are tested through **MSW**, not axios mocks: `server.use(http.get(...))` from `src/test/msw`. That keeps the real interceptors in `src/lib/http.ts` under test. Copy `src/services/__tests__/lead.service.test.ts`.
 - Unhandled requests error by design (`onUnhandledRequest: "error"` in `vitest.setup.ts`) — a missing handler is a failing test, not a hang.
 - Components: `@testing-library/react` + `@testing-library/user-event`. Query by role and label, not by test id. A component using query hooks needs a `QueryClientProvider` wrapper with `retry: false`.
 - Assert behavior, not implementation. No snapshot tests of whole trees.
 
 ## End-to-end — Playwright
 
-- Location: `e2e/*.spec.ts`, `baseURL` is already configured — use `page.goto("/items")`.
+- Location: `e2e/*.spec.ts`, `baseURL` is already configured — use `page.goto("/leads")`.
 - The config reuses a running dev server, so do not start one yourself.
 - Cover the flow a user actually performs, and API contracts via `request.get("/api/...")`. See `e2e/smoke.spec.ts`.
 

@@ -7,13 +7,13 @@ test("home page renders", async ({ page }) => {
   await expect(page).toHaveTitle(/projectkit/i);
 });
 
-test("health endpoint reports the database is up", async ({ request }) => {
-  const response = await request.get("/api/health");
+test("leads endpoint returns a paginated envelope", async ({ request }) => {
+  const response = await request.get("/api/leads");
 
   expect(response.status()).toBe(200);
   await expect(response.json()).resolves.toMatchObject({
     success: true,
     status: 200,
-    data: { status: "ok", database: "up" },
+    data: { items: expect.any(Array), total: expect.any(Number) },
   });
 });

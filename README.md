@@ -12,7 +12,7 @@ npm run db:migrate
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). `GET /api/health` reports whether the database is reachable.
+Open [http://localhost:3000](http://localhost:3000). `GET /api/leads` is the reference endpoint — proves handler → envelope → Prisma → Postgres is wired.
 
 ## Commands
 
@@ -51,24 +51,24 @@ Then run `/nextjs-kit:init-rules` once to copy the rule files into that project'
 
 ### Agents
 
-| Agent | Owns | Use for |
-| --- | --- | --- |
-| `data-modeler` | `prisma/` | New model, field, enum, relation, migration |
-| `api-builder` | `src/app/api/**/route.ts`, `src/lib/validations` | New or changed REST endpoint |
+| Agent             | Owns                                                       | Use for                                                                    |
+| ----------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `data-modeler`    | `prisma/`                                                  | New model, field, enum, relation, migration                                |
+| `api-builder`     | `src/app/api/**/route.ts`, `src/lib/validations`           | New or changed REST endpoint                                               |
 | `service-builder` | `src/services`, `src/hooks/queries`, `src/hooks/mutations` | Exposing an endpoint to the client — types, service functions, query hooks |
-| `ui-builder` | `src/components`, pages under `src/app` | Screens, forms, tables, layout |
-| `test-author` | Vitest (MSW) + Playwright specs | Coverage after a feature lands |
+| `ui-builder`      | `src/components`, pages under `src/app`                    | Screens, forms, tables, layout                                             |
+| `test-author`     | Vitest (MSW) + Playwright specs                            | Coverage after a feature lands                                             |
 
 ### Commands
 
-| Command | What it does |
-| --- | --- |
+| Command                             | What it does                                                          |
+| ----------------------------------- | --------------------------------------------------------------------- |
 | `/nextjs-kit:feature <description>` | Build a full vertical slice — schema, API, services, hooks, UI, tests |
-| `/nextjs-kit:endpoint <resource>` | Build one API resource end-to-end |
-| `/nextjs-kit:migrate <change>` | Change the Prisma schema, produce a reviewed migration |
-| `/nextjs-kit:review [scope]` | Review the working diff against the layering contract |
-| `/nextjs-kit:verify` | Run typecheck + lint + tests, report failures by gate |
-| `/nextjs-kit:init-rules` | One-time setup in a new project — copy rules, scaffold `AGENTS.md` |
+| `/nextjs-kit:endpoint <resource>`   | Build one API resource end-to-end                                     |
+| `/nextjs-kit:migrate <change>`      | Change the Prisma schema, produce a reviewed migration                |
+| `/nextjs-kit:review [scope]`        | Review the working diff against the layering contract                 |
+| `/nextjs-kit:verify`                | Run typecheck + lint + tests, report failures by gate                 |
+| `/nextjs-kit:init-rules`            | One-time setup in a new project — copy rules, scaffold `AGENTS.md`    |
 
 ### Skill
 
@@ -76,13 +76,13 @@ Then run `/nextjs-kit:init-rules` once to copy the rule files into that project'
 
 ### Rules (`.claude/rules/`)
 
-| File | Covers |
-| --- | --- |
-| `engineering-principles.md` | DRY, single responsibility, composition, KISS, YAGNI, type safety |
-| `frontend.md` | Component files, props, JSX, client/server split, state, styling |
-| `backend.md` | Route handler files, response style, error handling |
-| `database.md` | Prisma model conventions, snake_case columns, indexes, migrations |
-| `react-performance.md` | Parallel async, RSC composition, Server Action auth, lazy loading, Suspense |
+| File                        | Covers                                                                      |
+| --------------------------- | --------------------------------------------------------------------------- |
+| `engineering-principles.md` | DRY, single responsibility, composition, KISS, YAGNI, type safety           |
+| `frontend.md`               | Component files, props, JSX, client/server split, state, styling            |
+| `backend.md`                | Route handler files, response style, error handling                         |
+| `database.md`               | Prisma model conventions, snake_case columns, indexes, migrations           |
+| `react-performance.md`      | Parallel async, RSC composition, Server Action auth, lazy loading, Suspense |
 
 Also ships a `PostToolUse` hook that formats every file an agent writes, and a `bin/init-rules.mjs` installer behind the skill above.
 

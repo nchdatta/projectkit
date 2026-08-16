@@ -20,7 +20,7 @@ Read `.claude/rules/engineering-principles.md` — most relevant here: one decla
 **1. `src/services/types.ts`** — declare the entity by hand.
 Dates are ISO `string`, not `Date`. Do not use `z.infer` and do not re-export Prisma types. This file is the client's view of the entity. Reads take `GetArg` / `ListArg` from here — never a bare `id` string — so `token` and `cache` can be threaded through.
 
-**2. `src/services/<resource>.service.ts`** — the **server** service. Copy `health.service.ts`.
+**2. `src/services/<resource>.service.ts`** — the **server** service. Copy `lead.service.ts`.
 
 ```ts
 export const itemService = {
@@ -33,7 +33,7 @@ export const itemService = {
 
 Native `fetch` through `request` from `@/lib/fetcher`, because only `fetch` participates in the Next.js cache. **Reads only** — no create/update/delete here. The token is passed explicitly; there is no interceptor on the server.
 
-**3. `src/services/<resource>.service.client.ts`** — the **client** service. Copy `health.service.client.ts`.
+**3. `src/services/<resource>.service.client.ts`** — the **client** service. Copy `lead.service.client.ts`.
 
 ```ts
 export const itemClientService = {
@@ -90,4 +90,4 @@ Never hand-write a key array in a hook.
 
 ## Finish
 
-Add or extend the MSW-backed test in `src/services/__tests__/` following `health.service.test.ts` — assert both the success unwrap and the `ApiError` path. Run `npm run verify`.
+Add or extend the MSW-backed test in `src/services/__tests__/` following `lead.service.test.ts` — assert both the success unwrap and the `ApiError` path. Run `npm run verify`.

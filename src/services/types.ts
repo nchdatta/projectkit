@@ -25,11 +25,19 @@ export interface ListArg extends Omit<GetArg, "id"> {
 // `ListArg` minus the transport fields — what a query key is built from.
 export type ListFilters = Omit<ListArg, "token" | "cache">;
 
-// Returned by `GET /api/health` — the reference entity.
-export type HealthStatus = {
-  status: "ok";
-  database: "up";
-  timestamp: string;
+export type LeadStatus = "NEW" | "CONTACTED" | "QUALIFIED" | "LOST" | "CONVERTED";
+
+// Reference entity — the worked example for the layering contract.
+export type Lead = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  status: LeadStatus;
+  source: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
-// CRM entities (Lead, Contact, Deal, Activity, …) are declared here as they are built.
+// More CRM entities (Contact, Deal, Activity, …) are declared here as they are built.

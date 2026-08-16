@@ -69,7 +69,7 @@ Hard rules:
 - **Query keys carry only what changes the result** — never `token`, never `cache`. List keys are typed `ListFilters`, so hooks destructure those out before building a key.
 - **Server Actions do cache invalidation only**, in an `actions.ts` beside the route that owns it. Everything else is a Route Handler.
 
-Copy the working reference implementations: `src/app/api/health/route.ts`, `src/services/health.service{,.client}.ts`, `src/hooks/queries/use-health-query.ts`, and the specs in `src/services/__tests__/`.
+Copy the working reference implementations: `src/app/api/leads/route.ts` and `[id]/route.ts`, `src/services/lead.service{,.client}.ts`, `src/hooks/queries/use-leads-query.ts`, `src/hooks/mutations/use-leads-mutation.ts`, and the specs in `src/services/__tests__/`.
 
 ## Where files live
 

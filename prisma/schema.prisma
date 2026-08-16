@@ -9,10 +9,28 @@ datasource db {
   provider = "postgresql"
 }
 
-// Infrastructure check — CRM models (Lead, Contact, Deal, …) land here later.
-model HealthCheck {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now())
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  LOST
+  CONVERTED
+}
 
-  @@map("health_checks")
+// Reference model — the worked example for the layering contract. More CRM models land the same way.
+model Lead {
+  id         String     @id @default(uuid())
+  name       String
+  email      String
+  phone      String?
+  status     LeadStatus @default(NEW)
+  source     String?
+  notes      String?
+  deleted_at DateTime?
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+
+  @@index([status])
+  @@index([deleted_at])
+  @@map("leads")
 }
