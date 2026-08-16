@@ -36,8 +36,8 @@ Every feature moves through the same files, in this order:
 src/app/api/<resource>/route.ts                Route Handler — zod-parses input, calls Prisma, returns the envelope
 src/lib/validations/<resource>.ts              zod schemas — shared by the handler and the form
 src/services/types.ts                          entity types, GetArg / ListArg
-src/services/<resource>.service.ts             SERVER service — fetch via lib/fetcher, cacheable, token passed in. Reads only
-src/services/<resource>.service.client.ts      CLIENT service — axios, session + errors via interceptors. Reads and writes
+src/services/<resource>.service.ts             SERVER service — fetch via lib/fetcher, cacheable, token passed in. Reads only, called by Server Components and by client read hooks alike
+src/services/<resource>.service.client.ts      CLIENT service — axios, session + errors via interceptors. Writes only
 src/lib/query-keys.ts                          every cache key, in one object
 src/hooks/queries/use-<resource>-query.ts      read hooks
 src/hooks/mutations/use-<resource>-mutation.ts write hooks
@@ -45,13 +45,13 @@ src/components/<area>/<module>/*.tsx           UI — area is dashboard | storef
 src/app/**/actions.ts                          Server Actions — ONLY revalidatePath / revalidateTag
 ```
 
-Dependencies run one way: **components → hooks → client service → HTTP → route handlers → Prisma**. Server Components reach the same handlers through the server service. Mutations are client-scoped — a Server Component that writes goes through a Server Action or a Route Handler.
+Dependencies run one way: **components → hooks → service → HTTP → route handlers → Prisma**. Read hooks and Server Components both call the server service; write (mutation) hooks call the client service. Mutations are client-scoped — a Server Component that writes goes through a Server Action or a Route Handler.
 
 Hard rules:
 
 - **Prisma is imported only from `src/lib/db.ts`.** Never `new PrismaClient()` elsewhere, never import `@generated/prisma` outside `db.ts`.
-- **Components never touch the database, axios, or `fetch`.** Client components go through a query hook → client service; Server Components call the server service.
-- **Query hooks import client services only** — the fetch transport attaches no session in the browser, so the call silently loses auth.
+- **Components never touch the database, axios, or `fetch`.** Client components go through a query/mutation hook → service; Server Components call the server service directly.
+- **Query hooks call the server service, mutation hooks call the client service** — reads reuse the server service's `fetch` transport (fine to call client-side, GET routes don't require the session), writes go through axios so the interceptor attaches the session and errors normalize to `ApiError`.
 - **Route Handlers never import a service.** That would make the API call itself over HTTP.
 - **`process.env` is read only in `src/lib/env.ts`.** Everything else imports `serverEnv` / `clientEnv`.
 - **axios is instantiated only in `src/lib/http.ts`; raw `fetch` against the API only in `src/lib/fetcher.ts`.**
