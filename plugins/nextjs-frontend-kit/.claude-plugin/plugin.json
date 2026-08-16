@@ -1,0 +1,14 @@
+{
+  "name": "nextjs-frontend-kit",
+  "description": "Frontend-only Next.js 16 kit for apps backed by a separate API: three layer-owning agents (UI, tests, review), workflow commands, code-style rules, and a rules-install skill.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Nayan Chandra Datta",
+    "email": "nayanchdatta.dev@gmail.com",
+    "url": "https://github.com/nchdatta"
+  },
+  "homepage": "https://github.com/nchdatta/projectkit/tree/main/plugins/nextjs-frontend-kit",
+  "repository": "https://github.com/nchdatta/projectkit",
+  "license": "MIT",
+  "keywords": ["nextjs", "frontend", "tanstack-query", "typescript", "architecture", "agents"]
+}

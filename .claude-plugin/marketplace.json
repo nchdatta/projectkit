@@ -11,6 +11,11 @@
       "name": "nextjs-kit",
       "source": "./plugins/nextjs-kit",
       "description": "Layered architecture kit for Next.js 16 + Prisma 7 + TanStack Query — agents, commands, rules, and a planning skill."
+    },
+    {
+      "name": "nextjs-frontend-kit",
+      "source": "./plugins/nextjs-frontend-kit",
+      "description": "Frontend-only Next.js 16 kit for apps backed by a separate API — UI/test/review agents, commands, rules, and a rules-install skill."
     }
   ]
 }
