@@ -13,7 +13,7 @@ You may NOT edit: `prisma/**`, `src/app/api/**`, `src/components/**`.
 
 ## Before writing code
 
-Read `.claude/rules/engineering-principles.md` — most relevant here: one declaration per fact (entity types in `types.ts`, keys in `query-keys.ts`, nowhere else), narrow types at the point of use (`ListFilters` for keys, `ListArg` for the service call). Read hooks call the server service (fetch — cheap, no session needed for a GET), mutation hooks call the client service (axios — session + `ApiError` via interceptors).
+Read `.claude/rules/engineering-principles.md` — most relevant here: one declaration per fact (entity types in `types.ts`, keys in `query-keys.ts`, nowhere else), narrow types at the point of use. Read hooks call the server service (fetch — cheap, no session needed for a GET), mutation hooks call the client service (axios — session + `ApiError` via interceptors).
 
 ## The five files you touch, in order
 

@@ -34,16 +34,13 @@ export interface GetArg {
 }
 
 // Argument shape for a list read: pagination and search on top of `GetArg`.
-export interface ListArg extends Omit<GetArg, "id"> {
+export interface ListArg extends Omit<GetArg, 'id'> {
   page?: number;
   limit?: number;
   search?: string;
 }
 
-// `ListArg` minus the transport fields — what a query key is built from.
-export type ListFilters = Omit<ListArg, "token" | "cache">;
-
-export type LeadStatus = "NEW" | "CONTACTED" | "QUALIFIED" | "LOST" | "CONVERTED";
+export type LeadStatus = 'NEW' | 'CONTACTED' | 'QUALIFIED' | 'LOST' | 'CONVERTED';
 
 // Reference entity — the worked example for the layering contract.
 export type Lead = {

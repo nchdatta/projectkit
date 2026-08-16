@@ -14,7 +14,7 @@ A file does one job at one layer. A component renders, a hook wires cache to ser
 
 ## Composition and narrow types
 
-Extend by wrapping, not by adding another `variant` branch to a stable component every time a caller differs. Type at the point of use: `ListFilters` over `ListArg` when only filters matter, a prop object of exactly what the component reads rather than the whole entity when it renders a name.
+Extend by wrapping, not by adding another `variant` branch to a stable component every time a caller differs. Type at the point of use: a prop object of exactly what the component reads rather than the whole entity when it renders a name.
 
 ## KISS
 

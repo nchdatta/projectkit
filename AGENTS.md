@@ -66,7 +66,7 @@ Hard rules:
 - **One zod schema per resource in `src/lib/validations/`, used twice** — `safeParse` in the handler, `zodResolver` in the form.
 - **Every Route Handler returns `{ success, status, message, data, errors? }`** via a helper from `src/lib/api-response.ts` (`ok`, `created`, `fail`, `failValidation`, `notFound`, `unauthorized`, `forbidden`, `serverError`) — never a bare `NextResponse.json`. `errors` is keyed by dotted field path (`"contact.email"`), form-level under `_`; both transports turn any `success: false` into an `ApiError` that drops into react-hook-form's `setError`.
 - **Entity types are hand-written in `src/services/types.ts`** — never `z.infer`, never re-exported Prisma types. Dates are ISO `string`.
-- **Query keys carry only what changes the result** — never `token`, never `cache`. List keys are typed `ListFilters`, so hooks destructure those out before building a key.
+- **Query keys carry only what changes the result** — never `token`, never `cache`.
 - **Server Actions do cache invalidation only**, in an `actions.ts` beside the route that owns it. Everything else is a Route Handler.
 
 Copy the working reference implementations: `src/app/api/leads/route.ts` and `[id]/route.ts`, `src/services/lead.service{,.client}.ts`, `src/hooks/queries/use-leads-query.ts`, `src/hooks/mutations/use-leads-mutation.ts`, and the specs in `src/services/__tests__/`.
