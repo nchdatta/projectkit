@@ -1,12 +1,12 @@
-import { ApiError } from "@/lib/api-error";
-import { ApiResponse } from "@/services/types";
+import { ApiError } from '@/lib/api-error';
+import { ApiResponse } from '@/services/types';
 
 // The `fetch` transport for server services; not `server-only`, but attaches no session on the client.
 
 export type QueryParams = Record<string, string | number | boolean | undefined | null>;
 
 export type FetchOptions = {
-  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   /** Session token. Server callers pass it explicitly — there is no interceptor here. */
   token?: string | null;
   cache?: RequestCache;
@@ -17,13 +17,13 @@ export type FetchOptions = {
   signal?: AbortSignal;
 };
 
-const API_BASE = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api`;
+const API_BASE = `${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api`;
 
 function buildUrl(path: string, params?: QueryParams): string {
-  const url = new URL(`${API_BASE}${path.startsWith("/") ? path : `/${path}`}`);
+  const url = new URL(`${API_BASE}${path.startsWith('/') ? path : `/${path}`}`);
 
   for (const [key, value] of Object.entries(params ?? {})) {
-    if (value !== undefined && value !== null && value !== "") {
+    if (value !== undefined && value !== null && value !== '') {
       url.searchParams.set(key, String(value));
     }
   }
@@ -33,7 +33,7 @@ function buildUrl(path: string, params?: QueryParams): string {
 
 // Calls a Route Handler and returns the unwrapped `data`, or throws `ApiError`.
 export async function request<T>(path: string, options: FetchOptions = {}): Promise<T> {
-  const { method = "GET", token, cache, next, params, body, headers, signal } = options;
+  const { method = 'GET', token, cache, next, params, body, headers, signal } = options;
 
   let response: Response;
 
@@ -44,17 +44,17 @@ export async function request<T>(path: string, options: FetchOptions = {}): Prom
       next,
       signal,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...headers,
       },
       body: body === undefined ? undefined : JSON.stringify(body),
     });
   } catch (error) {
-    if (error instanceof Error && error.name === "AbortError") {
-      throw new ApiError("Request aborted", 0);
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new ApiError('Request aborted', 0);
     }
-    throw new ApiError("Network error — could not reach the server", 0);
+    throw new ApiError('Network error — could not reach the server', 0);
   }
 
   let payload: ApiResponse<T> | null = null;
@@ -67,14 +67,14 @@ export async function request<T>(path: string, options: FetchOptions = {}): Prom
 
   if (!response.ok || payload.success === false) {
     throw new ApiError(
-      payload.message || "Request failed",
+      payload.message || 'Request failed',
       payload.status || response.status,
       payload.errors,
     );
   }
 
   if (payload.data === null || payload.data === undefined) {
-    throw new ApiError(payload.message || "Response contained no data", response.status);
+    throw new ApiError(payload.message || 'Response contained no data', response.status);
   }
 
   return payload.data;

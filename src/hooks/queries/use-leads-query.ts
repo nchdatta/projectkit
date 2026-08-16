@@ -2,21 +2,22 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import { queryKeys } from "@/lib/query-keys";
-import { leadClientService } from "@/services/lead.service.client";
+import { QUERY_KEYS } from "@/lib/query-keys";
+import { leadService } from "@/services/lead.service";
 import type { ListFilters } from "@/services/types";
 
-// Reference query hook file — one file per resource, all its read hooks, bound to a client service.
+// Reference query hook file — one file per resource, all its read hooks, bound to a service.
 export function useLeadsQuery(filters: ListFilters = {}) {
   return useQuery({
-    queryKey: queryKeys.leads.list(filters),
-    queryFn: () => leadClientService.list(filters),
+    queryKey: QUERY_KEYS.leads.list,
+    queryFn: () => leadService.getLeads(filters),
   });
 }
 
 export function useLeadQuery(id: string) {
   return useQuery({
-    queryKey: queryKeys.leads.detail(id),
-    queryFn: () => leadClientService.get(id),
+    queryKey: [...QUERY_KEYS.leads.list, id],
+    queryFn: () => leadService.getLead({ id }),
+    enabled: !!id,
   });
 }

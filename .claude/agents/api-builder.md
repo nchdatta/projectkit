@@ -40,7 +40,6 @@ Only create one when the point is `revalidatePath` / `revalidateTag` after a mut
 ## Never
 
 - Never import anything from `src/services` — that would make the API call itself over HTTP.
-- Never read `process.env` directly; use `serverEnv` from `@/lib/env`.
 - Never return raw Prisma models with fields the client should not see. Shape the response to match the entity in `src/services/types.ts`.
 
 ## Finish

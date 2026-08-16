@@ -2,15 +2,16 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { queryKeys } from "@/lib/query-keys";
+import { QUERY_KEYS } from "@/lib/query-keys";
 import { leadClientService } from "@/services/lead.service.client";
+import type { UpdateLeadInput } from "@/lib/validations/lead";
 
 export function useCreateLeadMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: leadClientService.create,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.leads.all }),
+    mutationFn: leadClientService.createLead,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.leads.list }),
   });
 }
 
@@ -18,8 +19,9 @@ export function useUpdateLeadMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: leadClientService.update,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.leads.all }),
+    mutationFn: ({ id, ...data }: UpdateLeadInput & { id: string }) =>
+      leadClientService.updateLead(id, data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.leads.list }),
   });
 }
 
@@ -27,7 +29,7 @@ export function useDeleteLeadMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: leadClientService.remove,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.leads.all }),
+    mutationFn: leadClientService.deleteLead,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.leads.list }),
   });
 }

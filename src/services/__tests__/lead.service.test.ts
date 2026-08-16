@@ -32,7 +32,7 @@ describe("leadService (server)", () => {
       ),
     );
 
-    await expect(leadService.list()).resolves.toMatchObject({ items: [lead], total: 1 });
+    await expect(leadService.getLeads()).resolves.toMatchObject({ items: [lead], total: 1 });
   });
 
   it("sends the token it is given", async () => {
@@ -45,7 +45,7 @@ describe("leadService (server)", () => {
       }),
     );
 
-    await leadService.get({ id: lead.id, token: "abc123" });
+    await leadService.getLead({ id: lead.id, token: "abc123" });
 
     expect(authorization).toBe("Bearer abc123");
   });
@@ -60,8 +60,8 @@ describe("leadService (server)", () => {
       ),
     );
 
-    await expect(leadService.get({ id: lead.id })).rejects.toBeInstanceOf(ApiError);
-    await expect(leadService.get({ id: lead.id })).rejects.toMatchObject({
+    await expect(leadService.getLead({ id: lead.id })).rejects.toBeInstanceOf(ApiError);
+    await expect(leadService.getLead({ id: lead.id })).rejects.toMatchObject({
       message: "Lead not found",
       status: 404,
     });

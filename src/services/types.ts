@@ -18,6 +18,14 @@ export type ApiResponse<T> = {
   errors?: ApiErrors;
 };
 
+// Shape of a list handler's `data` — items plus the paging fields it was queried with.
+export type Paginated<T> = {
+  items: T[];
+  total: number;
+  page: number;
+  limit: number;
+};
+
 // `token`: passed explicitly server-side; on the client the interceptor attaches it. `cache`: fetch-only.
 export interface GetArg {
   token?: string | null;
@@ -31,6 +39,9 @@ export interface ListArg extends Omit<GetArg, "id"> {
   limit?: number;
   search?: string;
 }
+
+// `ListArg` minus the transport fields — what a query key is built from.
+export type ListFilters = Omit<ListArg, "token" | "cache">;
 
 export type LeadStatus = "NEW" | "CONTACTED" | "QUALIFIED" | "LOST" | "CONVERTED";
 
