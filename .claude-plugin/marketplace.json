@@ -1,0 +1,16 @@
+{
+  "name": "nchdatta",
+  "description": "Claude Code plugins for layered Next.js application development.",
+  "owner": {
+    "name": "Nayan Chandra Datta",
+    "email": "nayanchdatta.dev@gmail.com",
+    "url": "https://github.com/nchdatta"
+  },
+  "plugins": [
+    {
+      "name": "nextjs-kit",
+      "source": "./plugins/nextjs-kit",
+      "description": "Layered architecture kit for Next.js 16 + Prisma 7 + TanStack Query — agents, commands, rules, and a planning skill."
+    }
+  ]
+}

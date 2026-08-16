@@ -1,0 +1,14 @@
+{
+  "name": "nextjs-kit",
+  "description": "Layered architecture kit for Next.js 16 + Prisma 7 + TanStack Query: five layer-owning agents, workflow commands, code-style rules, and a feature planning skill.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Nayan Chandra Datta",
+    "email": "nayanchdatta.dev@gmail.com",
+    "url": "https://github.com/nchdatta"
+  },
+  "homepage": "https://github.com/nchdatta/flowly/tree/main/plugins/nextjs-kit",
+  "repository": "https://github.com/nchdatta/flowly",
+  "license": "MIT",
+  "keywords": ["nextjs", "prisma", "tanstack-query", "typescript", "architecture", "agents"]
+}

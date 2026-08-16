@@ -18,6 +18,8 @@ const eslintConfig = defineConfig([
     "playwright-report/**",
     "test-results/**",
     "generated/**",
+    // Distributed plugin payload — standalone Node scripts, not app code.
+    "plugins/**",
   ]),
 ]);
 

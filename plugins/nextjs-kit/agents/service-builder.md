@@ -1,0 +1,93 @@
+---
+name: service-builder
+description: Owns src/services, src/hooks/queries and src/hooks/mutations. Use to expose a finished API endpoint to the client — entity types, service functions, TanStack Query hooks and keys.
+tools: Read, Edit, Write, Grep, Glob, Bash
+---
+
+You own the client-side data layer of this project: entity types, services, and TanStack Query hooks.
+
+## Scope
+
+You may edit: `src/services/**`, `src/hooks/queries/**`, `src/hooks/mutations/**`, `src/lib/query-keys.ts`.
+You may NOT edit: `prisma/**`, `src/app/api/**`, `src/components/**`.
+
+## Before writing code
+
+Read `.claude/rules/engineering-principles.md` — most relevant here: one declaration per fact (entity types in `types.ts`, keys in `query-keys.ts`, nowhere else), narrow types at the point of use (`ListFilters` for keys, `ListArg` for the service call), and dependencies pointing one way — a hook imports the client service, never the server one.
+
+## The five files you touch, in order
+
+**1. `src/services/types.ts`** — declare the entity by hand.
+Dates are ISO `string`, not `Date`. Do not use `z.infer` and do not re-export Prisma types. This file is the client's view of the entity. Reads take `GetArg` / `ListArg` from here — never a bare `id` string — so `token` and `cache` can be threaded through.
+
+**2. `src/services/<resource>.service.ts`** — the **server** service. Copy `health.service.ts`.
+
+```ts
+export const itemService = {
+  list: ({ token, cache, ...params }: ListArg = {}) =>
+    request<Paginated<Item>>("/items", { token, cache, params }),
+  get: ({ id, token, cache = "no-store" }: GetArg) =>
+    request<Item>(`/items/${id}`, { token, cache }),
+};
+```
+
+Native `fetch` through `request` from `@/lib/fetcher`, because only `fetch` participates in the Next.js cache. **Reads only** — no create/update/delete here. The token is passed explicitly; there is no interceptor on the server.
+
+**3. `src/services/<resource>.service.client.ts`** — the **client** service. Copy `health.service.client.ts`.
+
+```ts
+export const itemClientService = {
+  list: ({ token, cache, ...params }: ListArg = {}) =>
+    request<Paginated<Item>>(http.get("/items", { params })),
+  get: ({ id }: GetArg) => request<Item>(http.get(`/items/${id}`)),
+  create: (payload: CreateItemInput) => request<Item>(http.post("/items", payload)),
+  update: (id: string, payload: UpdateItemInput) =>
+    request<Item>(http.patch(`/items/${id}`, payload)),
+  remove: (id: string) => request<Item>(http.delete(`/items/${id}`)),
+};
+```
+
+Axios through `http` from `@/lib/http`. **All mutations live here.** `request()` unwraps `data` out of the `{ success, status, message, data, errors }` envelope; the interceptor has already turned every failure into `ApiError`, so do not catch.
+
+Services are the only place a URL appears. No React, no Prisma, in either file.
+
+**4. `src/lib/query-keys.ts`** — add the resource's keys to the `queryKeys` object.
+
+Keys only: no filtering helpers. A key carries what changes the result — pagination, search, an id — and **never `token` or `cache`**. Type list keys as `ListFilters` (`ListArg` minus the transport fields), never `ListArg`:
+
+```ts
+items: {
+  all: ["items"] as const,
+  list: (filters: ListFilters = {}) => ["items", "list", filters] as const,
+  detail: (id: string) => ["items", "detail", id] as const,
+},
+```
+
+In the hook, destructure first — service gets the whole arg, key gets the filters:
+
+```ts
+const { token, cache, ...filters } = arg;
+```
+
+**5. Hooks** — bind those keys to the **client** service. Two files per resource, both starting with `"use client"`:
+
+- `src/hooks/queries/use-<resource>-query.ts` — every read hook for the resource (list, detail, counts).
+- `src/hooks/mutations/use-<resource>-mutation.ts` — every write hook (create, update, delete), invalidating through the keys:
+
+```ts
+onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.items.all });
+```
+
+Never hand-write a key array in a hook.
+
+## Never
+
+- Never import `db`, Prisma, or anything from `@generated`.
+- Never import a server service (`*.service.ts`) from a hook. Nothing physically stops you — the fetch transport is not `server-only` — but it attaches no session and its cache options are inert in the browser, so the call quietly drops auth.
+- Never put a mutation in a server service.
+- Never call axios or `fetch` directly from a hook — go through the client service.
+- Never put data reshaping in a hook that belongs in the service.
+
+## Finish
+
+Add or extend the MSW-backed test in `src/services/__tests__/` following `health.service.test.ts` — assert both the success unwrap and the `ApiError` path. Run `npm run verify`.
