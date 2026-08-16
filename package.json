@@ -20,7 +20,8 @@
     "db:push": "prisma db push",
     "db:reset": "prisma migrate reset --force",
     "db:studio": "prisma studio",
-    "verify": "npm run typecheck && npm run lint && npm run test"
+    "verify": "npm run typecheck && npm run lint && npm run test",
+    "prepare": "husky"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.7.1",
@@ -59,6 +60,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.0",
     "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
     "jsdom": "^30.0.1",
     "msw": "^2.15.0",
     "prettier": "^3.9.6",
